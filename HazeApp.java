@@ -46,6 +46,7 @@ public class HazeApp {
         panel.add(pwText);
 
         // sign in/up buttonsJLabel signInButton = new JButton("Sign in");
+        signInButton = new JButton("Sign in");
         signInButton.setBounds(500, 20, 80, 25);
         panel.add(signInButton);
         signUpButton = new JButton("Sign up");
