@@ -1,5 +1,8 @@
 ﻿USE Apps201
 GO
+TRUNCATE TABLE userApps
+TRUNCATE TABLE Users
+TRUNCATE TABLE  Apps
 
 INSERT INTO  Apps (appName, description, price, numDownloads)
 VALUES 		('Counter-Strike: Global Offensive', 
