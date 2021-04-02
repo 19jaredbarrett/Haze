@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class HazeApp {
@@ -11,6 +12,7 @@ public class HazeApp {
     public static JPasswordField pwText;
     public static JButton signInbutton;
     public static JButton signUpButton;
+    public static JTextArea appDesc;
 
     public static void main(String[] args) throws SQLException, SQLException {
 
@@ -60,9 +62,16 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
+
         JScrollPane scrollPane = new JScrollPane(conn.getAppsTable());
         scrollPane.setBounds(10, 80, 350, 300 );
         panel.add(scrollPane);
+        // create the text area that will display the description of the app
+        appDesc = new JTextArea("App: \n" + "Description: ");
+        appDesc.setBounds(370, 80, 300 , 300);
+        appDesc.setLineWrap(true);
+        appDesc.setWrapStyleWord(true);
+        panel.add(appDesc);
 
 
 

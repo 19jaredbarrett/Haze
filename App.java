@@ -49,4 +49,12 @@ public class App {
         this.price = price;
         this.numDownloads = numDownloads;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
