@@ -29,25 +29,25 @@ public class HazeApp {
 
         // username entry field
         JTextField userText = new JTextField(20);
-        userText.setBounds(50, 20, 165, 25);
+        userText.setBounds(80, 20, 165, 25);
         panel.add(userText);
 
         // password label
         JLabel pwLabel = new JLabel("Password:");
-        pwLabel.setBounds(230, 20, 80, 25);
+        pwLabel.setBounds(250, 20, 80, 25);
         panel.add(pwLabel);
 
         // password entryfield
         JPasswordField pwText = new JPasswordField(20);
-        pwText.setBounds(300, 20, 165, 25);
+        pwText.setBounds(330, 20, 165, 25);
         panel.add(pwText);
 
         // sign in/up buttons
         JButton signInButton = new JButton("Sign in");
-        signInButton.setBounds(480, 20, 80, 25);
+        signInButton.setBounds(500, 20, 80, 25);
         panel.add(signInButton);
         JButton signUpButton = new JButton("Sign up");
-        signUpButton.setBounds(570, 20, 80, 25);
+        signUpButton.setBounds(500, 50, 80, 25);
         panel.add(signUpButton);
 
        /*
