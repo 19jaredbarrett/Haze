@@ -1,7 +1,5 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.event.MouseEvent;
+
 import java.sql.SQLException;
 
 public class HazeApp {
@@ -15,7 +13,7 @@ public class HazeApp {
     public static JButton signUpButton;
     public static JTextArea appDesc;
 
-    public static void main(String[] args) throws SQLException, SQLException {
+    public static void main(String[] args) throws SQLException {
 
         panel = new JPanel();
         frame = new JFrame();
@@ -76,7 +74,24 @@ public class HazeApp {
 
 
 
+
         frame.setVisible(true);
+
+    }
+
+    /**
+     * Function: clear the Jframe AKA make blank
+     */
+    public void clearJFrame() {
+
+    }
+
+    /**
+     * Function: create a interface that allows the user
+     * to create a username and password.
+     * This also will insert username and password into database.
+     */
+    public void makeCreateAccountInterface() {
 
     }
 }
