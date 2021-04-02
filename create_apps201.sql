@@ -21,9 +21,11 @@ CREATE TABLE Users(
 GO
 
 CREATE TABLE Apps (
-	appId		int IDENTITY(1,1)				NOT NULL,
-	appName		VARCHAR(100)					NOT NULL,
-	description VARCHAR(MAX)					NOT NULL
+	appId			int IDENTITY(1,1)			NOT NULL,
+	appName			VARCHAR(100)				NOT NULL,
+	description		VARCHAR(MAX)				NOT NULL,
+	price 			SMALLMONEY					NOT NULL,
+	numDownloads	INT							NOT NULL
 	PRIMARY KEY(appId)
 )
 GO
