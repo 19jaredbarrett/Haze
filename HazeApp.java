@@ -6,18 +6,19 @@ import java.sql.SQLException;
 
 public class HazeApp {
     public static final SqlServerConnection conn  = new SqlServerConnection();
-    public static JLabel userLabel;
+    // we make global variables for all things JFrame, so we can access these variables outside of the class
+    public static JPanel panel;
+    public static JFrame frame;
     public static JTextField userText;
-    public static JLabel pwLabel;
     public static JPasswordField pwText;
-    public static JButton signInbutton;
+    public static JButton signInButton;
     public static JButton signUpButton;
     public static JTextArea appDesc;
 
     public static void main(String[] args) throws SQLException, SQLException {
 
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        panel = new JPanel();
+        frame = new JFrame();
         frame.setSize(720,640);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
@@ -30,7 +31,7 @@ public class HazeApp {
         panel.add(userLabel);
 
         // username entry field
-        JTextField userText = new JTextField(20);
+        userText = new JTextField(20);
         userText.setBounds(80, 20, 165, 25);
         panel.add(userText);
 
@@ -40,15 +41,14 @@ public class HazeApp {
         panel.add(pwLabel);
 
         // password entryfield
-        JPasswordField pwText = new JPasswordField(20);
+        pwText = new JPasswordField(20);
         pwText.setBounds(330, 20, 165, 25);
         panel.add(pwText);
 
-        // sign in/up buttons
-        JButton signInButton = new JButton("Sign in");
+        // sign in/up buttonsJLabel signInButton = new JButton("Sign in");
         signInButton.setBounds(500, 20, 80, 25);
         panel.add(signInButton);
-        JButton signUpButton = new JButton("Sign up");
+        signUpButton = new JButton("Sign up");
         signUpButton.setBounds(500, 50, 80, 25);
         panel.add(signUpButton);
 
