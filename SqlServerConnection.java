@@ -1,5 +1,6 @@
-
-
+import DbClasses.App;
+import DbClasses.ApplicationsTableModel;
+import DbClasses.ConnectionProvider;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -11,11 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SqlServerConnection implements ConnectionProvider{
+public class SqlServerConnection implements ConnectionProvider {
     private static final HikariConfig conf = new HikariConfig();
     private static HikariDataSource ds;
     private static Connection conn;
     private String currentDescDisplayed;
+    private ApplicationsTableModel model;
     //HazePa$$word123
     public SqlServerConnection ()  {
         conf.setJdbcUrl("jdbc:sqlserver://localhost\\\\SQLEXPRESS:1433;databaseName=Apps201;");
@@ -36,6 +38,11 @@ public class SqlServerConnection implements ConnectionProvider{
     }
 
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
     /**
      *
      * @return
@@ -69,7 +76,7 @@ public class SqlServerConnection implements ConnectionProvider{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-       ApplicationsTableModel model = new ApplicationsTableModel(appsList);
+        ApplicationsTableModel model = new ApplicationsTableModel(appsList);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
         // add mouse listener for when the user clicks a cell
@@ -97,6 +104,35 @@ public class SqlServerConnection implements ConnectionProvider{
         return appsTable;
     }
 
+    private ArrayList<App> getAppsList(int order, boolean isAsc) throws SQLException {
+        conn = getConnection();
+        ArrayList<App> appsList = new ArrayList<App>();
+        String call = "{call getApps(?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setInt(1, order);
+            int isAscInt = (isAsc) ? 0 : 1;
+            stmt.setInt(2,isAscInt);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    String name = rs.getString(2);
+                    String desc = rs.getString(3);
+                    double price = rs.getDouble(4);
+                    int numDownloads = rs.getInt(5);
+                    App currInfo = new App(id, name, desc, price, numDownloads);
+                    appsList.add(currInfo);
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return appsList;
+    }
     public String[] getApps() throws SQLException {
         conn = getConnection();
         ArrayList<String> appsList = new ArrayList<>();

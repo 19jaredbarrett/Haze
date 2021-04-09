@@ -8,6 +8,6 @@ import java.awt.event.ActionListener;
 public class SignUpActionHandler extends HazeApp implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
-    	HazeApp.signUp();
+        HazeApp.signUp();
     }
 }

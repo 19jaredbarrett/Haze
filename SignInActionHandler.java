@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class SignInActionHandler extends HazeApp implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
-String username = HazeApp.userText.getText();
-    	HazeApp.login(username);
+        String username = HazeApp.userText.getText();
+        HazeApp.login(username);
     }
 }
