@@ -15,6 +15,10 @@ public class SignInActionHandler  implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         String username = HazeApp.userText.getText();
         char[] password = HazeApp.pwText.getPassword();
+        if(username.length() == 0 || password.length == 0) {
+            HazeApp.displaySuccess("Must provide username and password (●__●)", false);
+            return;
+        }
         User u = null;
         try {
             u = HazeApp.conn.loginUser(username, password);
@@ -22,7 +26,7 @@ public class SignInActionHandler  implements ActionListener {
             throwables.printStackTrace();
         }
         if( u == null) {
-            HazeApp.displaySuccess("Incorrect Username or Password ;)", false);
+            HazeApp.displaySuccess("Incorrect Username or Password (╯°□°）╯", false);
         } else {
             HazeApp.conn.setCurrentUser(u);
             HazeApp.updateUserInterfaceLoggedIn();

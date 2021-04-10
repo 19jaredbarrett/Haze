@@ -157,7 +157,7 @@ public class HazeApp {
 
         //sign up button
         JButton registerUser = new JButton("Register");
-        registerUser.setBounds(500, 20, 80, 25);
+        registerUser.setBounds(500, 20, 90, 25);
         // mouse Listener: creates user based on several conditions:
         // user doesn't exist, passwords are equal, username provided
         registerUser.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -168,8 +168,10 @@ public class HazeApp {
                 char[] confPass = confPassField.getPassword();
                 String displayString;
                 boolean isCreated = false;
-                if(user.isEmpty()|| pass.length == 0 || confPass.length == 0) {
-                    displayString = "*must provide username and password*";
+                if(user.length() <= 5) {
+                    displayString = "must provide username(>5) (T＿T)";
+                } else if(pass.length <= 5) {
+                    displayString = "must provide password(>5) (T＿T)";
                 } else if (Arrays.equals(pass, confPass)) {
 
                     try {
@@ -178,12 +180,12 @@ public class HazeApp {
                         throwables.printStackTrace();
                     }
                     if(!isCreated) {
-                        displayString = "*User already exists*";
+                        displayString = "User already exists ¯\\_(⊙︿⊙)_/¯";
                     } else {
-                        displayString = "!!!!User created Successfully!!!!";
+                        displayString = "Successful Creation (☞ﾟヮﾟ)☞ ☜(ﾟヮﾟ☜)";
                     }
                 } else {
-                    displayString = "*Must match passwords*";
+                    displayString = "*Must match passwords (◔‸◔ )ʃ*";
                 }
                 // display the home page with the label
                 try {
@@ -226,7 +228,7 @@ public class HazeApp {
         if(displayCreatedSuccess != null)
             panel.remove(displayCreatedSuccess);
         displayCreatedSuccess = new JLabel(displayString);
-        displayCreatedSuccess.setBounds(250, 50, 300, 25);
+        displayCreatedSuccess.setBounds(230, 50, 300, 25);
         if(isSuccess)
             displayCreatedSuccess.setForeground(Color.BLUE);
         else
