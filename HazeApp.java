@@ -19,6 +19,7 @@ public class HazeApp {
     public static JTextArea appDesc;
     public static JTable appsTable;
     public static JScrollPane scrollPane;
+    private static JLabel displayCreatedSuccess;
 
     private static User currentUser;
 
@@ -222,7 +223,9 @@ public class HazeApp {
      * @param isSuccess
      */
     public static void displaySuccess(String displayString, boolean isSuccess) {
-        JLabel displayCreatedSuccess = new JLabel(displayString);
+        if(displayCreatedSuccess != null)
+            panel.remove(displayCreatedSuccess);
+        displayCreatedSuccess = new JLabel(displayString);
         displayCreatedSuccess.setBounds(250, 50, 300, 25);
         if(isSuccess)
             displayCreatedSuccess.setForeground(Color.BLUE);
@@ -254,6 +257,7 @@ public class HazeApp {
             public void mouseClicked(MouseEvent evt) {
                 try {
                     displayHomePage(false);
+                    displaySuccess("Logged out Successfully (☞ ͡° ͜ʖ ͡°)☞", true);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
