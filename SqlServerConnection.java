@@ -29,8 +29,6 @@ public class SqlServerConnection implements ConnectionProvider {
         conf.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
         conf.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         ds = new HikariDataSource(conf);
-
-
     }
 
     @Override
@@ -167,15 +165,14 @@ public class SqlServerConnection implements ConnectionProvider {
         try(CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
             stmt.setString(1, u.getUsername());
-            stmt.setString(2, u.getPassword());
+            stmt.setString(2, String.valueOf(pass));
             stmt.setFloat(3, (float)u.getBalance());
-            stmt.setInt(4, u.getAccessLevel());
+            stmt.setInt(4, u.getAccessLevelInt());
             boolean hasResult = stmt.execute();
             if(hasResult) {
                 ResultSet rs = stmt.getResultSet();
                 if(rs.next()) {
                     isSuccess = true;
-                    setCurrentUser(new User(username, pass));
                 }
             }
             stmt.close();
@@ -185,6 +182,34 @@ public class SqlServerConnection implements ConnectionProvider {
         }
 
         return isSuccess;
+    }
+    public User loginUser(String username, char[] pass) throws SQLException {
+        // return null if blank objects
+        if(username.isEmpty() || pass.length == 0)
+            return null;
+        conn = getConnection();
+        User u = new User(username, pass);
+        User returnUser = null;
+        String call = "{call loginUser(?, ?)}";
+        try(CallableStatement stmt = conn.prepareCall(call)) {
+            stmt.setString(1, u.getUsername());
+            stmt.setString(2, String.valueOf(pass));
+            boolean hasResult = stmt.execute();
+            if(hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                if(rs.next()) {
+                    returnUser =  new User( rs.getString(2),
+                                        "blank_passsword",
+                                            rs.getDouble(4),
+                                            rs.getInt(5));
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return returnUser;
     }
     public User getCurrentUser() {
         return currentUser;
