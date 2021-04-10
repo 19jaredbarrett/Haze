@@ -92,9 +92,9 @@ CREATE PROCEDURE getApps
 
 GO
 
-ALTER PROCEDURE registerUser
-	@username		VARCHAR(50),
-	@password		VARCHAR(50),
+CREATE PROCEDURE registerUser
+	@username		VARCHAR(100),
+	@password		VARCHAR(100),
 	@balance		FLOAT,
 	@accessLevel	INT
 AS
@@ -109,3 +109,17 @@ BEGIN
 	
 END
 GO
+
+CREATE PROCEDURE loginUser
+	@username		VARCHAR(100),
+	@password		VARCHAR(100)
+AS
+BEGIN
+	SELECT *
+	FROM Users	u
+	WHERE	(u.username = @username) AND
+			(u.password = COMPRESS(@password))
+END
+GO
+
+-- EXEC loginUser 'DogeLord'

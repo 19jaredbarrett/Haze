@@ -1,8 +1,23 @@
 ﻿USE Apps201
 GO
-TRUNCATE TABLE userApps
-TRUNCATE TABLE Users
-TRUNCATE TABLE  Apps
+
+-- drop constraints so we can truncate the table
+BEGIN TRAN
+	ALTER TABLE userApps
+	DROP	CONSTRAINT FK_userId,
+			CONSTRAINT FK_appId
+	TRUNCATE TABLE Users
+	TRUNCATE TABLE  Apps
+	TRUNCATE TABLE userApps
+	ALTER TABLE userApps
+	ADD CONSTRAINT FK_userId FOREIGN KEY (userId) REFERENCES [dbo].[Users] ([userId]),
+		CONSTRAINT FK_appId FOREIGN KEY (appId) REFERENCES [dbo].[Apps] ([appId])
+
+COMMIT TRAN
+
+
+
+
 
 INSERT INTO  Apps (appName, description, price, numDownloads)
 VALUES 		('Counter-Strike: Global Offensive', 
@@ -66,3 +81,10 @@ VALUES 		('Counter-Strike: Global Offensive',
 			'Sea of Thieves is a 2018 action-adventure game developed by Rare and published by Microsoft Studios. ', 39.99, 11258963),
 			('Assassin''s Creed Odyssey', 
 			'Assassin''s Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft.', 59.99, 9632581)
+
+	GO
+
+
+-- this is our default user!
+exec registerUser 'DogeLord', 'This1sMyRealPa$$word', 6969696.00, 2
+-- exec loginUser 'DogeLord', 'This1sMyRealPa$$word'
