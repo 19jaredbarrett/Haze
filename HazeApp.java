@@ -42,7 +42,7 @@ public class HazeApp {
         panel.setLayout(null);
         clearPanel();
         if(loggedIn)
-            displayLoggedInInterface(conn.getCurrentUser().getUsername());
+            updateUserInterfaceLoggedIn();
         else
             displayGuestInterface();
        /*
@@ -67,11 +67,7 @@ public class HazeApp {
         panel.add(appDesc);
     }
 
-    private static void displayLoggedInInterface(String username) {
-        JLabel userLabel = new JLabel("Logged in as: " + username);
-        userLabel.setSize(100, 40);
-        userLabel.setBounds(10, 20, 100, 40);
-    }
+
     private static void displayGuestInterface()  {
         // username label
         JLabel userLabel = new JLabel("Username:");
@@ -170,10 +166,11 @@ public class HazeApp {
                 char[] pass = pwText.getPassword();
                 char[] confPass = confPassField.getPassword();
                 String displayString;
+                boolean isCreated = false;
                 if(user.isEmpty()|| pass.length == 0 || confPass.length == 0) {
                     displayString = "*must provide username and password*";
                 } else if (Arrays.equals(pass, confPass)) {
-                    boolean isCreated = false;
+
                     try {
                         isCreated = conn.registerUser(user, pass);
                     } catch (SQLException throwables) {
@@ -190,10 +187,8 @@ public class HazeApp {
                 // display the home page with the label
                 try {
                     displayHomePage(false);
-                    JLabel displayCreatedSuccess = new JLabel(displayString);
-                    displayCreatedSuccess.setBounds(250, 50, 300, 25);
-                    displayCreatedSuccess.setForeground(Color.BLUE);
-                    panel.add(displayCreatedSuccess);
+                    displaySuccess(displayString, isCreated);
+
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -221,17 +216,37 @@ public class HazeApp {
         frame.repaint();
     }
 
+    /**
+     * displays whether we successfully logged in, signed out
+     * @param displayString
+     * @param isSuccess
+     */
+    public static void displaySuccess(String displayString, boolean isSuccess) {
+        JLabel displayCreatedSuccess = new JLabel(displayString);
+        displayCreatedSuccess.setBounds(250, 50, 300, 25);
+        if(isSuccess)
+            displayCreatedSuccess.setForeground(Color.BLUE);
+        else
+            displayCreatedSuccess.setForeground(Color.RED);
+        panel.add(displayCreatedSuccess);
+        panel.repaint();
+    }
+
 
     /**
      * updates user interface
-     * @param user the user we want to log in
      */
-    public static void updateUserInterfaceLoggedIn(String user) {
+    public static void updateUserInterfaceLoggedIn() {
         panel.remove(0);
         panel.remove(1);
         panel.remove(2);
         panel.remove(userText);
         panel.remove(pwText);
+        User currUser = conn.getCurrentUser();
+        JLabel loggedIn = new JLabel("Logged in as: " + currUser.getUsername() + ", Balance = " + currUser.getBalance() + ", AccessLevel = " + currUser.getAccessLevel());
+        loggedIn.setBounds(10, 20, 400, 25);
+        panel.add(loggedIn);
+
         JButton signOutButton = new JButton("Sign Out");
         signOutButton.setBounds(500, 20, 90, 25);
         signOutButton.addMouseListener(new java.awt.event.MouseAdapter() {
