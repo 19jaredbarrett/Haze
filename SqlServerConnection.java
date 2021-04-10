@@ -1,5 +1,7 @@
-
-
+import DbClasses.App;
+import DbClasses.ApplicationsTableModel;
+import DbClasses.ConnectionProvider;
+import DbClasses.User;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -11,11 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SqlServerConnection implements ConnectionProvider{
+public class SqlServerConnection implements ConnectionProvider {
     private static final HikariConfig conf = new HikariConfig();
     private static HikariDataSource ds;
     private static Connection conn;
-    private String currentDescDisplayed;
+    private User currentUser;
+
     //HazePa$$word123
     public SqlServerConnection ()  {
         conf.setJdbcUrl("jdbc:sqlserver://localhost\\\\SQLEXPRESS:1433;databaseName=Apps201;");
@@ -36,10 +39,12 @@ public class SqlServerConnection implements ConnectionProvider{
     }
 
 
+
+
     /**
      *
-     * @return
-     * @throws SQLException
+     * @return returns an apps table
+     * @throws SQLException if the statement fucks up
      */
     public JTable getAppsTable() throws SQLException {
         conn = getConnection();
@@ -69,7 +74,7 @@ public class SqlServerConnection implements ConnectionProvider{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-       ApplicationsTableModel model = new ApplicationsTableModel(appsList);
+        ApplicationsTableModel model = new ApplicationsTableModel(appsList);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
         // add mouse listener for when the user clicks a cell
@@ -97,6 +102,35 @@ public class SqlServerConnection implements ConnectionProvider{
         return appsTable;
     }
 
+    private ArrayList<App> getAppsList(int order, boolean isAsc) throws SQLException {
+        conn = getConnection();
+        ArrayList<App> appsList = new ArrayList<App>();
+        String call = "{call getApps(?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setInt(1, order);
+            int isAscInt = (isAsc) ? 0 : 1;
+            stmt.setInt(2,isAscInt);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    String name = rs.getString(2);
+                    String desc = rs.getString(3);
+                    double price = rs.getDouble(4);
+                    int numDownloads = rs.getInt(5);
+                    App currInfo = new App(id, name, desc, price, numDownloads);
+                    appsList.add(currInfo);
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return appsList;
+    }
     public String[] getApps() throws SQLException {
         conn = getConnection();
         ArrayList<String> appsList = new ArrayList<>();
@@ -119,4 +153,44 @@ public class SqlServerConnection implements ConnectionProvider{
         return appArr;
     }
 
+    /**
+     * Registers a user into the system if it exists
+     * @param username
+     * @return
+     * @throws SQLException
+     */
+    public boolean registerUser(String username, char[] pass) throws SQLException {
+        conn = getConnection();
+        User u = new User(username, pass);
+        boolean isSuccess = false;
+        String call = "{call registerUser(?, ?, ?, ?)}";
+        try(CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setString(1, u.getUsername());
+            stmt.setString(2, u.getPassword());
+            stmt.setFloat(3, (float)u.getBalance());
+            stmt.setInt(4, u.getAccessLevel());
+            boolean hasResult = stmt.execute();
+            if(hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                if(rs.next()) {
+                    isSuccess = true;
+                    setCurrentUser(new User(username, pass));
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return isSuccess;
+    }
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 }

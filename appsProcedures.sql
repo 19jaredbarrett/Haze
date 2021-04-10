@@ -7,7 +7,7 @@
 	3: we sort by numDownloads
 
 	@isAsc : 
-	0: ascending orderge
+	0: ascending order
 	1: descending order
 */
 
@@ -89,3 +89,23 @@ CREATE PROCEDURE getApps
 	END
 
 	EXEC getApps 1, 1
+
+GO
+
+ALTER PROCEDURE registerUser
+	@username		VARCHAR(50),
+	@password		VARCHAR(50),
+	@balance		FLOAT,
+	@accessLevel	INT
+AS
+BEGIN
+	SET NOCOUNT ON
+	IF NOT EXISTS (SELECT * FROM Users WHERE username = @username) BEGIN
+		-- upsert it
+		INSERT INTO		Users (username, password, balance, accesslevel)
+		VALUES (@username, COMPRESS(@password), @balance, @accesslevel)
+		SELECT 1
+	END 
+	
+END
+GO
