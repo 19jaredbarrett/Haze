@@ -10,14 +10,47 @@ import java.util.ArrayList;
 //https://www.codejava.net/java-se/swing/editable-jtable-example
 public class ApplicationsTableModel extends AbstractTableModel {
     private final ArrayList<App> appsTable;
+    // keeps track if we are ascending right now or descending
+    private boolean isAsc;
+    private int currentApp;
+
     private final String[] columnNames = new String[] {
-            "Name", "Price", "Downloads", "Rating"
+            // extra character to
+            "Name ↓", "Price  ", "Downloads  ", "Rating  "
     };
     private final Class[] columnClass = new Class[] {
             String.class, Double.class, Integer.class, Integer.class
     };
-    // keeps track if we are ascending right now or descending
-    private boolean isAsc;
+
+
+    /**
+     * Method that updates the current ascending or descending value
+     * current app is 1-4, name: 1, price: 2, downloads: 3, rating 4
+     * the user just clicked a table header
+     * @param appPressed the app the user just pressed
+     * @return
+     */
+    public int getIsAsc(int appPressed) {
+        appPressed -=1;
+        String extraChar;
+        int returnVal;
+        if(isAsc) {
+            extraChar = "↑";
+            returnVal = 1;
+            isAsc = false;
+
+        } else {
+            returnVal = 0;
+            extraChar = "↓";
+            isAsc = true;
+        }
+        columnNames[appPressed] = columnNames[appPressed].substring(0, columnNames[appPressed].length()-1) + extraChar;
+
+
+        return returnVal;
+    }
+
+
 
     public boolean isAsc() {
         return isAsc;
@@ -30,6 +63,7 @@ public class ApplicationsTableModel extends AbstractTableModel {
     public ApplicationsTableModel(ArrayList<App> appsTable) {
         this.appsTable = appsTable;
         this.isAsc = true;
+        currentApp = 1;
     }
     @Override
     public String getColumnName(int column)

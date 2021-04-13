@@ -53,7 +53,7 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
-        appsTable = conn.getAppsTable();
+        appsTable = conn.getAppsTable(1, 1);
         scrollPane = new JScrollPane(appsTable);
         scrollPane.setBounds(10, 80, 350, 300 );
         panel.add(scrollPane);

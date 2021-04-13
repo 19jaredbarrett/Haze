@@ -11,7 +11,7 @@ class SqlServerConnectionTest {
     @Test
     void getAppsTable() throws SQLException {
         conn.getConnection();
-        conn.getAppsTable();
+        conn.getAppsTable(1,1 );
 
     }
 

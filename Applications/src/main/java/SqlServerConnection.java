@@ -7,6 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -22,13 +23,13 @@ public class SqlServerConnection implements ConnectionProvider {
     private App currentApp;
 
     //HazePa$$word123
-    public SqlServerConnection ()  {
+    public SqlServerConnection() {
         conf.setJdbcUrl("jdbc:sqlserver://localhost\\\\SQLEXPRESS:1433;databaseName=Apps201;");
         conf.setUsername("cse201Login");
         conf.setPassword("HazePa$$word123");
-        conf.addDataSourceProperty( "cachePrepStmts" , "true" );
-        conf.addDataSourceProperty( "prepStmtCacheSize" , "250" );
-        conf.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+        conf.addDataSourceProperty("cachePrepStmts", "true");
+        conf.addDataSourceProperty("prepStmtCacheSize", "250");
+        conf.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         conf.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         ds = new HikariDataSource(conf);
     }
@@ -39,27 +40,24 @@ public class SqlServerConnection implements ConnectionProvider {
     }
 
 
-
-
     /**
-     *
      * @return returns an apps table
      * @throws SQLException if the statement screws up
      */
-    public JTable getAppsTable() throws SQLException {
+    public JTable getAppsTable(int order, int isAsc) throws SQLException {
         conn = getConnection();
 
         // a rectangle of arraylists
         ArrayList<App> appsList = new ArrayList<App>();
         String call = "{call getApps(?, ?)}";
-        try(CallableStatement stmt = conn.prepareCall(call)) {
+        try (CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
             stmt.setInt(1, 1);
             stmt.setInt(2, 1);
             boolean hasResult = stmt.execute();
-            if(hasResult) {
+            if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
-                while(rs.next()) {
+                while (rs.next()) {
                     int id = rs.getInt(1);
                     String name = rs.getString(2);
                     String desc = rs.getString(3);
@@ -80,12 +78,25 @@ public class SqlServerConnection implements ConnectionProvider {
         JTable appsTable = new JTable(model);
         // set table
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         appsTable.setDefaultRenderer(Integer.class, centerRenderer);
         appsTable.setDefaultRenderer(Double.class, centerRenderer);
         appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
         appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
         appsTable.getColumnModel().getColumn(3).setPreferredWidth(30);
+
+        appsTable.getTableHeader().addMouseListener(new MouseAdapter() {
+                                                        @Override
+                                                        public void mouseClicked(MouseEvent e) {
+                                                            int col = appsTable.columnAtPoint(e.getPoint());
+                                                            // set appsTable to
+                                                            String name = appsTable.getColumnName(col);
+                                                            System.out.println("Column index selected " + col + " " + name);
+                                                        }
+                                                    }
+
+
+        );
         // add mouse listener for when the user clicks a cell
         appsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -100,7 +111,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     App clickedApp = model.getApp(row);
                     textAreaString += clickedApp.getId() + "\n\nName: ";
                     textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
-                    textAreaString += clickedApp.getDescription()+ "\n\nPrice: ";
+                    textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
                     textAreaString += clickedApp.getNumDownloads() + "\n\nHaze Rating (1-10): ";
                     textAreaString += clickedApp.getRating();
@@ -120,7 +131,7 @@ public class SqlServerConnection implements ConnectionProvider {
             // set order and isAsc to true
             stmt.setInt(1, order);
             int isAscInt = (isAsc) ? 0 : 1;
-            stmt.setInt(2,isAscInt);
+            stmt.setInt(2, isAscInt);
             boolean hasResult = stmt.execute();
             if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
@@ -142,15 +153,16 @@ public class SqlServerConnection implements ConnectionProvider {
         }
         return appsList;
     }
+
     public String[] getApps() throws SQLException {
         conn = getConnection();
         ArrayList<String> appsList = new ArrayList<>();
         String call = "SELECT Apps.appName FROM Apps";
-        try(CallableStatement stmt = conn.prepareCall(call)) {
+        try (CallableStatement stmt = conn.prepareCall(call)) {
             boolean hasResult = stmt.execute();
-            if(hasResult) {
+            if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
-                while(rs.next()) {
+                while (rs.next()) {
                     appsList.add(rs.getString(1));
                 }
             }
@@ -166,6 +178,7 @@ public class SqlServerConnection implements ConnectionProvider {
 
     /**
      * Registers a user into the system if it exists
+     *
      * @param username
      * @return
      * @throws SQLException
@@ -175,16 +188,16 @@ public class SqlServerConnection implements ConnectionProvider {
         User u = new User(username, pass);
         boolean isSuccess = false;
         String call = "{call registerUser(?, ?, ?, ?)}";
-        try(CallableStatement stmt = conn.prepareCall(call)) {
+        try (CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
             stmt.setString(1, u.getUsername());
             stmt.setString(2, String.valueOf(pass));
-            stmt.setFloat(3, (float)u.getBalance());
+            stmt.setFloat(3, (float) u.getBalance());
             stmt.setInt(4, u.getAccessLevelInt());
             boolean hasResult = stmt.execute();
-            if(hasResult) {
+            if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
-                if(rs.next()) {
+                if (rs.next()) {
                     isSuccess = true;
                 }
             }
@@ -196,25 +209,26 @@ public class SqlServerConnection implements ConnectionProvider {
 
         return isSuccess;
     }
+
     public User loginUser(String username, char[] pass) throws SQLException {
         // return null if blank objects
-        if(username.isEmpty() || pass.length == 0)
+        if (username.isEmpty() || pass.length == 0)
             return null;
         conn = getConnection();
         User u = new User(username, pass);
         User returnUser = null;
         String call = "{call loginUser(?, ?)}";
-        try(CallableStatement stmt = conn.prepareCall(call)) {
+        try (CallableStatement stmt = conn.prepareCall(call)) {
             stmt.setString(1, u.getUsername());
             stmt.setString(2, String.valueOf(pass));
             boolean hasResult = stmt.execute();
-            if(hasResult) {
+            if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
-                if(rs.next()) {
-                    returnUser =  new User( rs.getString(2),
-                                        "blank_passsword",
-                                            rs.getDouble(4),
-                                            rs.getInt(5));
+                if (rs.next()) {
+                    returnUser = new User(rs.getString(2),
+                            "blank_passsword",
+                            rs.getDouble(4),
+                            rs.getInt(5));
                 }
             }
             stmt.close();
@@ -224,6 +238,7 @@ public class SqlServerConnection implements ConnectionProvider {
         }
         return returnUser;
     }
+
     public User getCurrentUser() {
         return currentUser;
     }
