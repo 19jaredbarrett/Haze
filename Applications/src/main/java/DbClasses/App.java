@@ -6,11 +6,20 @@ public class App {
     private String description;
     private double price;
     private int numDownloads;
-
+    private int rating;
     /*
-        Point of class: store a row of data from the database: apps
+               Point of class: store a row of data from the database: apps
 
-     */
+            */
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+
     public void setId(int id) {
         this.id = id;
     }
@@ -43,13 +52,14 @@ public class App {
         return numDownloads;
     }
 
-    public App(int id, String appName, String description, double price, int numDownloads)
+    public App(int id, String appName, String description, double price, int numDownloads, int rating)
     {
         this.id = id;
         this.appName = appName;
         this.description = description;
         this.price = price;
         this.numDownloads = numDownloads;
+        this.rating = rating;
     }
 
     public String getDescription() {

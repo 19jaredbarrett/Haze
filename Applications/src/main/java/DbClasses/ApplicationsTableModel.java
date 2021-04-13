@@ -10,26 +10,69 @@ import java.util.ArrayList;
 //https://www.codejava.net/java-se/swing/editable-jtable-example
 public class ApplicationsTableModel extends AbstractTableModel {
     private final ArrayList<App> appsTable;
-    private final String[] columnNames = new String[] {
-            "Name", "Price", "Downloads"
-    };
-    private final Class[] columnClass = new Class[] {
-            String.class, Double.class, Integer.class
-    };
     // keeps track if we are ascending right now or descending
     private boolean isAsc;
+    private int sortedApp;
 
-    public boolean isAsc() {
-        return isAsc;
+    private String[] columnNames;
+    private final Class[] columnClass = new Class[] {
+            String.class, Double.class, Integer.class, Integer.class
+    };
+
+
+    /**
+     * Method that updates the current ascending or descending value
+     * current app is 1-4, name: 1, price: 2, downloads: 3, rating 4
+     * the user just clicked a table header
+     * @return
+     */
+    public int getIsAsc() {
+
+        // return the opposite of whatever the current status is
+        if(isAsc)
+            return 0;
+        else return 1;
     }
+
+
+
 
     public void setAsc(boolean asc) {
         isAsc = asc;
     }
 
-    public ApplicationsTableModel(ArrayList<App> appsTable) {
+    public ApplicationsTableModel(ArrayList<App> appsTable, int sortedApp, boolean isAsc  ) {
         this.appsTable = appsTable;
-        this.isAsc = true;
+        this.sortedApp = sortedApp;
+        this.isAsc = isAsc;
+        setColumnNames();
+
+    }
+    private void setColumnNames() {
+         columnNames = new String[] {
+                "Name", "Price", "Downloads", "Rating"
+        };
+         switch (sortedApp) {
+             case 0:
+                 if(isAsc) columnNames[0] += " ↑";
+                 else columnNames[0] += " ↓";
+                 break;
+             case 1:
+                 if(isAsc)
+                     columnNames[1] += " ↑";
+                 else columnNames[1] += " ↓";
+                 break;
+             case 2:
+                 if(isAsc)
+                     columnNames[2] += " ↑";
+                 else columnNames[2] += " ↓";
+                 break;
+             case 3:
+                 if(isAsc)
+                     columnNames[3] += " ↑";
+                 else columnNames[3] += " ↓";
+                 break;
+         }
     }
     @Override
     public String getColumnName(int column)
@@ -73,6 +116,8 @@ public class ApplicationsTableModel extends AbstractTableModel {
         }
         else if(2 == columnIndex) {
             return row.getNumDownloads();
+        } else if (3 == columnIndex) {
+            return row.getRating();
         }
         return null;
     }

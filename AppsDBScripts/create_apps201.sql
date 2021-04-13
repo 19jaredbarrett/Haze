@@ -27,7 +27,8 @@ CREATE TABLE Apps (
 	appName			VARCHAR(100)				NOT NULL,
 	description		VARCHAR(MAX)				NOT NULL,
 	price 			SMALLMONEY					NOT NULL,
-	numDownloads	INT							NOT NULL
+	numDownloads	INT							NOT NULL,
+	rating			INT							NOT NULL
 	PRIMARY KEY(appId)
 )
 GO
