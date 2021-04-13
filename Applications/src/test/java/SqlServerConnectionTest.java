@@ -1,6 +1,7 @@
 import DbClasses.User;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.*;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,8 +12,13 @@ class SqlServerConnectionTest {
     @Test
     void getAppsTable() throws SQLException {
         conn.getConnection();
-        conn.getAppsPane(1,1 );
-
+        JTable appsTable =  conn.getAppsTable(1,1 );
+        for(int i = 0; i < appsTable.getRowCount(); i++) {
+            for (int j = 0; j < appsTable.getColumnCount(); j++) {
+                System.out.print(appsTable.getValueAt(i, j) + " ");
+            }
+            System.out.println();
+        }
     }
 
     @Test

@@ -52,7 +52,9 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
-        scrollPane = conn.getAppsPane(1, 1);
+        JTable appsTable = conn.getAppsTable(1, 1);
+        HazeApp.scrollPane = new JScrollPane(appsTable);
+        HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
         panel.add(scrollPane);
         // create the text area that will display the description of the app
         appDesc = new JTextArea("App: Click on an app to reveal! \n\nDescription: ");

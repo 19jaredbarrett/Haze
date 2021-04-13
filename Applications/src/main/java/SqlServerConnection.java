@@ -45,7 +45,7 @@ public class SqlServerConnection implements ConnectionProvider {
      * @return returns an apps table
      * @throws SQLException if the statement screws up
      */
-    public JScrollPane getAppsPane(int order, int isAsc) throws SQLException {
+    public JTable getAppsTable(int order, int isAsc) throws SQLException {
         conn = getConnection();
 
         // a rectangle of arraylists
@@ -97,7 +97,9 @@ public class SqlServerConnection implements ConnectionProvider {
                 // set appsTable to the new table model
                 HazeApp.panel.remove(HazeApp.scrollPane);
                 try {
-                    HazeApp.scrollPane = getAppsPane(col+1, model.getIsAsc());
+                    JTable appsTable = getAppsTable(col+1, model.getIsAsc());
+                    HazeApp.scrollPane = new JScrollPane(appsTable);
+                    HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
                     HazeApp.panel.add(HazeApp.scrollPane);
                     HazeApp.panel.repaint();
                     HazeApp.panel.invalidate();
@@ -139,14 +141,13 @@ public class SqlServerConnection implements ConnectionProvider {
                         HazeApp.displaySuccess("Huge Disappointment for Doge \uD83D\uDE14", false);
                     else  HazeApp.displaySuccess("", false);
                     HazeApp.appDesc.setText(textAreaString);
-                    HazeApp.panel.repaint();
+                    HazeApp.appDesc.repaint();
                 }
             }
         });
         // create scroll pane and set the bounds
-        JScrollPane scrollPane= new JScrollPane(appsTable);
-        scrollPane.setBounds(10, 80, 350, 450 );
-        return scrollPane;
+
+        return appsTable;
     } // end getScrollPane method
 
     /**
