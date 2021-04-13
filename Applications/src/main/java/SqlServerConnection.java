@@ -128,9 +128,15 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getNumDownloads() + "\n\nDoge's review (1-10): ";
                     int rating = clickedApp.getRating();
                     textAreaString += rating;
-                    // remove
+                    // Special ratings, display whether it is good or bad!
                     if(rating == 10)
-                        HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games", true);
+                        HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games ＜(。_。)＞", true);
+                    else if (rating == 0)
+                        HazeApp.displaySuccess("Gambling for kids! Beware parents credit card", false);
+                    else if (rating == -1)
+                        HazeApp.displaySuccess("Battle Royales are trash (ಠ_ಠ)", false);
+                    else if (rating == 1)
+                        HazeApp.displaySuccess("Huge Disappointment for Doge \uD83D\uDE14", false);
                     else  HazeApp.displaySuccess("", false);
                     HazeApp.appDesc.setText(textAreaString);
                     HazeApp.panel.repaint();

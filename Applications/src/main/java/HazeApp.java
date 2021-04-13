@@ -223,6 +223,7 @@ public class HazeApp {
 
     /**
      * displays whether we successfully logged in, signed out
+     * An empty displayString parameter clears the success label of our jframe
      * @param displayString sets the display to either a successful login/logout or unsuccessful
      * @param isSuccess sets the color, red or green
      */
