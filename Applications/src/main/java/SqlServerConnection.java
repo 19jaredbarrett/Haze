@@ -133,59 +133,6 @@ public class SqlServerConnection implements ConnectionProvider {
         return scrollPane;
     } // end getScrollPane method
 
-    private ArrayList<App> getAppsList(int order, boolean isAsc) throws SQLException {
-        conn = getConnection();
-        ArrayList<App> appsList = new ArrayList<App>();
-        String call = "{call getApps(?, ?)}";
-        try (CallableStatement stmt = conn.prepareCall(call)) {
-            // set order and isAsc to true
-            stmt.setInt(1, order);
-            int isAscInt = (isAsc) ? 0 : 1;
-            stmt.setInt(2, isAscInt);
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                ResultSet rs = stmt.getResultSet();
-                while (rs.next()) {
-                    int id = rs.getInt(1);
-                    String name = rs.getString(2);
-                    String desc = rs.getString(3);
-                    double price = rs.getDouble(4);
-                    int numDownloads = rs.getInt(5);
-                    int rating = rs.getInt(6);
-                    App currInfo = new App(id, name, desc, price, numDownloads, rating);
-                    appsList.add(currInfo);
-                }
-            }
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return appsList;
-    }
-
-    public String[] getApps() throws SQLException {
-        conn = getConnection();
-        ArrayList<String> appsList = new ArrayList<>();
-        String call = "SELECT Apps.appName FROM Apps";
-        try (CallableStatement stmt = conn.prepareCall(call)) {
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                ResultSet rs = stmt.getResultSet();
-                while (rs.next()) {
-                    appsList.add(rs.getString(1));
-                }
-            }
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        String[] appArr = new String[appsList.size()];
-        appArr = appsList.toArray(appArr);
-        return appArr;
-    }
-
     /**
      * Registers a user into the system if it exists
      *
