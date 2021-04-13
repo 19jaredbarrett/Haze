@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppTest {
 
 
-    App ex = new App(1, "DogeGame", "You play as a doge!", 50.00, 50504);
+    App ex = new App(1, "DogeGame", "You play as a doge!", 50.00, 50504, 0);
     @org.junit.jupiter.api.Test
     void setId() {
         ex.setId(2);

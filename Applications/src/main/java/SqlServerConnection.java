@@ -64,7 +64,8 @@ public class SqlServerConnection implements ConnectionProvider {
                     String desc = rs.getString(3);
                     double price = rs.getDouble(4);
                     int numDownloads = rs.getInt(5);
-                    currentApp = new App(id, name, desc, price, numDownloads);
+                    int rating = rs.getInt(6);
+                    currentApp = new App(id, name, desc, price, numDownloads, rating);
                     appsList.add(currentApp);
                 }
             }
@@ -119,7 +120,8 @@ public class SqlServerConnection implements ConnectionProvider {
                     String desc = rs.getString(3);
                     double price = rs.getDouble(4);
                     int numDownloads = rs.getInt(5);
-                    App currInfo = new App(id, name, desc, price, numDownloads);
+                    int rating = rs.getInt(6);
+                    App currInfo = new App(id, name, desc, price, numDownloads, rating);
                     appsList.add(currInfo);
                 }
             }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class ApplicationsTableModel extends AbstractTableModel {
     private final ArrayList<App> appsTable;
     private final String[] columnNames = new String[] {
-            "Name", "Price", "Downloads"
+            "Name", "Price", "Downloads", "Rating"
     };
     private final Class[] columnClass = new Class[] {
             String.class, Double.class, Integer.class
@@ -73,6 +73,8 @@ public class ApplicationsTableModel extends AbstractTableModel {
         }
         else if(2 == columnIndex) {
             return row.getNumDownloads();
+        } else if (3 == columnIndex) {
+
         }
         return null;
     }
