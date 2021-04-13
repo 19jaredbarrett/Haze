@@ -14,6 +14,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class SqlServerConnection implements ConnectionProvider {
@@ -39,7 +40,6 @@ public class SqlServerConnection implements ConnectionProvider {
     public Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
-
 
     /**
      * @return returns an apps table
@@ -96,13 +96,11 @@ public class SqlServerConnection implements ConnectionProvider {
                 int col = appsTable.columnAtPoint(e.getPoint());
                 // set appsTable to the new table model
                 HazeApp.panel.remove(HazeApp.scrollPane);
-
                 try {
                     HazeApp.scrollPane = getAppsPane(col+1, model.getIsAsc());
                     HazeApp.panel.add(HazeApp.scrollPane);
                     HazeApp.panel.repaint();
                     HazeApp.panel.invalidate();
-
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -125,7 +123,9 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
                     textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
-                    textAreaString += clickedApp.getNumDownloads() + "\n\nDoge's review (1-10): ";
+                    // format number of downloads with commas
+                    DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
+                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (1-10): ";
                     int rating = clickedApp.getRating();
                     textAreaString += rating;
                     // Special ratings, display whether it is good or bad!
