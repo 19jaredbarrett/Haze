@@ -126,7 +126,12 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
                     textAreaString += clickedApp.getNumDownloads() + "\n\nDoge's review (1-10): ";
-                    textAreaString += clickedApp.getRating();
+                    int rating = clickedApp.getRating();
+                    textAreaString += rating;
+                    // remove
+                    if(rating == 10)
+                        HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games", true);
+                    else  HazeApp.displaySuccess("", false);
                     HazeApp.appDesc.setText(textAreaString);
                 }
             }

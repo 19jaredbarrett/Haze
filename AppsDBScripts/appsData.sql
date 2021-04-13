@@ -22,7 +22,7 @@ COMMIT TRAN
 INSERT INTO  Apps (appName, description, price, numDownloads, rating)
 VALUES 		('Counter-Strike: Global Offensive', 
 				'Counter-Strike: Global Offensive is a multiplayer first-person shooter developed by
-				Valve and Hidden Path Entertainment. It is the fourth game in the Counter-Strike series.', 0.00, 999999999, 10),
+				Valve and Hidden Path Entertainment. It is the fourth game in the Counter-Strike series.', 0.00, 99999999, 10),
 
 			('Hades', 'Hades is a roguelike action role-playing video game developed and published by Supergiant Games.', 24.99, 1738432, 8),
 
@@ -30,11 +30,11 @@ VALUES 		('Counter-Strike: Global Offensive',
 			'Mount & Blade II: Bannerlord is a strategy action 
 			role-playing video game developed by Turkish company TaleWorlds Entertainment', 49.99, 992219, 7),
 			('Minecraft', 
-			'Minecraft is a sandbox video game developed by Mojang. ', 24.99, 99562219, 9),
+			'Minecraft is a sandbox video game developed by Mojang. ', 24.99, 99562219, 10),
 			('Grand Theft Auto V', 
-			'Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games.', 14.99 , 519515151, 8),
+			'Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games.', 14.99 , 51955151, 8),
 			('Fortnite', 
-			'Fortnite is an online video game developed by Epic Games and released in 2017. ', 0.00 , 129198485, -1),
+			'Fortnite is an online video game developed by Epic Games and released in 2017. ', 0.00 , 12919485, -1),
 			('Red Dead Redemption 2', 
 			'Red Dead Redemption 2 is a 2018 action-adventure game developed and published by Rockstar Games.', 59.99, 8196242, 7),
 			('The Elder Scrolls V: Skyrim', 
@@ -72,7 +72,7 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('Monster Hunter', 
 			'Monster Hunter: World is an action role-playing game developed and published by Capcom and the fifth mainline installment in the Monster Hunter series.', 29.99, 15489874, 4),
 			('Left 4 Dead 2', 
-			'Left 4 Dead 2 is a 2009 multiplayer survival horror game developed and published by Valve. ', 9.99, 5638521, 7),
+			'Left 4 Dead 2 is a 2009 multiplayer survival horror game developed and published by Valve. ', 9.99, 5638521, 3),
 			('DayZ', 
 			'DayZ is a survival video game developed and published by Bohemia Interactive.', 44.99, 6398521, 4),
 			('Fallout 4', 
@@ -84,13 +84,15 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('Outriders',
 			'Discover the hostile planet of Enoch as you embark on a journey to the source of a mysterious signal. INTENSE SHOOTER, DEEP RPG.', 59.99, 1492810, 5),
 			('Halo 3',
-			'Halo 3 is a 2007 first-person shooter game developed by Bungie for the Xbox 360 console', 15.00, 20032910, 9),
+			'Halo 3 is a 2007 first-person shooter game developed by Bungie for the Xbox 360 console', 15.00, 20032910, 6),
 			('Civilization V',
 			'Sid Meier''s Civilization V is a 4X video game in the Civilization series developed by Firaxis Games.', 30.00, 50321520, 9),
 			('Civilization VI',
 			'Sid Meier''s Civilization VI is a turn-based strategy 4X video game developed by Firaxis Games', 60.00, 201532014, 1),
 			('Rocket League', 
-			'Rocket League is a vehicular soccer video game developed and published by Psyonix', 24.99, 9658210, 6)
+			'Rocket League is a vehicular soccer video game developed and published by Psyonix', 24.99, 9658210, 6),
+			('Mount & Blade: Warband',
+			'Mount & Blade: Warband is the standalone expansion pack to the strategy action role-playing video game Mount & Blade.', 14.99, 532104, 10)
 
 	GO
 

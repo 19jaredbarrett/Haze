@@ -227,8 +227,13 @@ public class HazeApp {
      * @param isSuccess sets the color, red or green
      */
     public static void displaySuccess(String displayString, boolean isSuccess) {
-        if(displayCreatedSuccess != null)
+        if(displayCreatedSuccess != null) {
             panel.remove(displayCreatedSuccess);
+            if(displayString.isEmpty())
+                displayCreatedSuccess = null;
+            return;
+        }
+
         displayCreatedSuccess = new JLabel(displayString);
         displayCreatedSuccess.setBounds(230, 50, 300, 25);
         if(isSuccess)
