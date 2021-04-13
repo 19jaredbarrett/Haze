@@ -96,7 +96,9 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('NBA 2K',
 			'NBA 2K is a series of basketball sports simulation video games developed and released annually since 1999.', 59.99, 169203127, 0),
 			('Madden NFL',
-			'Madden NFL is an American football video game series developed by EA Tiburon for EA Sports. ', 59.99, 251203000, 0)
+			'Madden NFL is an American football video game series developed by EA Tiburon for EA Sports. ', 59.99, 251203000, 0),
+			('Clash Of Clans', 
+			'Clash of Clans is a freemium mobile strategy video game developed and published by Finnish game developer Supercell.', 0.00, 532012000, 0)
 
 	GO
 
