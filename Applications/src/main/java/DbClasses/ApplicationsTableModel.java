@@ -14,7 +14,7 @@ public class ApplicationsTableModel extends AbstractTableModel {
             "Name", "Price", "Downloads", "Rating"
     };
     private final Class[] columnClass = new Class[] {
-            String.class, Double.class, Integer.class
+            String.class, Double.class, Integer.class, Integer.class
     };
     // keeps track if we are ascending right now or descending
     private boolean isAsc;
