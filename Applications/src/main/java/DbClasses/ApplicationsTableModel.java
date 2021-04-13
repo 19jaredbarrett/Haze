@@ -31,21 +31,22 @@ public class ApplicationsTableModel extends AbstractTableModel {
      * @return
      */
     public int getIsAsc(int appPressed) {
-        appPressed -=1;
-        String extraChar;
+        // remove arrow at the end
+        columnNames[currentApp] = columnNames[currentApp].substring(0, columnNames[currentApp].length()-1);
+        String arrowChar;
         int returnVal;
         if(isAsc) {
-            extraChar = "↑";
+            arrowChar = "↑";
             returnVal = 1;
             isAsc = false;
 
         } else {
             returnVal = 0;
-            extraChar = "↓";
+            arrowChar = "↓";
             isAsc = true;
         }
-        columnNames[appPressed] = columnNames[appPressed].substring(0, columnNames[appPressed].length()-1) + extraChar;
-
+        columnNames[appPressed] = columnNames[appPressed].substring(0, columnNames[appPressed].length()-1) + arrowChar;
+        currentApp = appPressed;
 
         return returnVal;
     }

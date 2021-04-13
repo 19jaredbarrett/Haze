@@ -44,7 +44,7 @@ public class SqlServerConnection implements ConnectionProvider {
      * @return returns an apps table
      * @throws SQLException if the statement screws up
      */
-    public JTable getAppsTable(int order, int isAsc) throws SQLException {
+    public JScrollPane getAppsPane(int order, int isAsc) throws SQLException {
         conn = getConnection();
 
         // a rectangle of arraylists
@@ -85,18 +85,29 @@ public class SqlServerConnection implements ConnectionProvider {
         appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
         appsTable.getColumnModel().getColumn(3).setPreferredWidth(30);
 
+        // add mouse listener to the header of this table to completely get a new table
         appsTable.getTableHeader().addMouseListener(new MouseAdapter() {
-                                                        @Override
-                                                        public void mouseClicked(MouseEvent e) {
-                                                            int col = appsTable.columnAtPoint(e.getPoint());
-                                                            // set appsTable to
-                                                            String name = appsTable.getColumnName(col);
-                                                            System.out.println("Column index selected " + col + " " + name);
-                                                        }
-                                                    }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int col = appsTable.columnAtPoint(e.getPoint());
+                int isAsc = model.getIsAsc(col);
+                // set appsTable to the new table model
+                HazeApp.panel.remove(HazeApp.scrollPane);
 
+                try {
+                    HazeApp.scrollPane = getAppsPane(col+1, isAsc);
+                    HazeApp.panel.add(HazeApp.scrollPane);
+                    HazeApp.panel.repaint();
+                    HazeApp.panel.invalidate();
 
-        );
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                String name = appsTable.getColumnName(col);
+                System.out.println("Column index selected " + col + " " + name);
+            }
+
+        });
         // add mouse listener for when the user clicks a cell
         appsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -119,8 +130,9 @@ public class SqlServerConnection implements ConnectionProvider {
                 }
             }
         });
-
-        return appsTable;
+        JScrollPane scrollPane= new JScrollPane(appsTable);
+        scrollPane.setBounds(10, 80, 350, 300 );
+        return scrollPane;
     }
 
     private ArrayList<App> getAppsList(int order, boolean isAsc) throws SQLException {

@@ -17,7 +17,6 @@ public class HazeApp {
     public static JButton signInButton;
     public static JButton signUpButton;
     public static JTextArea appDesc;
-    public static JTable appsTable;
     public static JScrollPane scrollPane;
     private static JLabel displayCreatedSuccess;
 
@@ -53,9 +52,7 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
-        appsTable = conn.getAppsTable(1, 1);
-        scrollPane = new JScrollPane(appsTable);
-        scrollPane.setBounds(10, 80, 350, 300 );
+        scrollPane = conn.getAppsPane(1, 1);
         panel.add(scrollPane);
         // create the text area that will display the description of the app
         appDesc = new JTextArea("App: Click on an app to reveal! \n\nDescription: ");
