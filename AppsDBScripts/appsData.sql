@@ -22,7 +22,7 @@ COMMIT TRAN
 INSERT INTO  Apps (appName, description, price, numDownloads, rating)
 VALUES 		('Counter-Strike: Global Offensive', 
 				'Counter-Strike: Global Offensive is a multiplayer first-person shooter developed by
-				Valve and Hidden Path Entertainment. It is the fourth game in the Counter-Strike series.', 0.00, 999999999, 10),
+				Valve and Hidden Path Entertainment. It is the fourth game in the Counter-Strike series.', 0.00, 99999999, 10),
 
 			('Hades', 'Hades is a roguelike action role-playing video game developed and published by Supergiant Games.', 24.99, 1738432, 8),
 
@@ -30,23 +30,23 @@ VALUES 		('Counter-Strike: Global Offensive',
 			'Mount & Blade II: Bannerlord is a strategy action 
 			role-playing video game developed by Turkish company TaleWorlds Entertainment', 49.99, 992219, 7),
 			('Minecraft', 
-			'Minecraft is a sandbox video game developed by Mojang. ', 24.99, 99562219, 9),
+			'Minecraft is a sandbox video game developed by Mojang. ', 24.99, 99562219, 10),
 			('Grand Theft Auto V', 
-			'Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games.', 14.99 , 519515151, 8),
+			'Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games.', 14.99 , 51955151, 8),
 			('Fortnite', 
-			'Fortnite is an online video game developed by Epic Games and released in 2017. ', 0.00 , 129198485, -1),
+			'Fortnite is an online video game developed by Epic Games and released in 2017. ', 0.00 , 12919485, -1),
 			('Red Dead Redemption 2', 
 			'Red Dead Redemption 2 is a 2018 action-adventure game developed and published by Rockstar Games.', 59.99, 8196242, 7),
 			('The Elder Scrolls V: Skyrim', 
 			'The Elder Scrolls V: Skyrim is an open world action role-playing video game developed by Bethesda Game Studios and published by Bethesda Softworks.', 39.99, 11852141, 9),
 			('PlayerUnknown''s Battlegrounds', 
-			'PlayerUnknown''s Battlegrounds is an online multiplayer battle royale game developed and published by PUBG Corporation', 29.99, 1552652, 2),
+			'PlayerUnknown''s Battlegrounds is an online multiplayer battle royale game developed and published by PUBG Corporation', 29.99, 1552652, -1),
 			('Dark Souls III', 
 			'Dark Souls III is an action role-playing video game developed by FromSoftware and published by Bandai Namco Entertainment', 59.99, 9852561, 8),
 			('Old School RuneScape', 
-			'Old School RuneScape is a massively multiplayer online role-playing game developed and published by Jagex.', 0.00, 1203691, 9),
+			'Old School RuneScape is a massively multiplayer online role-playing game developed and published by Jagex.', 0.00, 1203691, 7),
 			('Apex Legends', 
-			'Apex Legends is a free-to-play battle royale game developed by Respawn Entertainment and published by Electronic Arts.', 0.00, 6214521, 0),
+			'Apex Legends is a free-to-play battle royale game developed by Respawn Entertainment and published by Electronic Arts.', 0.00, 6214521, -1),
 			('Dota 2', 
 			'Dota 2 is a multiplayer online battle arena video game developed and published by Valve.', 0.00, 18253963, 5),
 			('Cyberpunk 2077', 
@@ -72,7 +72,7 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('Monster Hunter', 
 			'Monster Hunter: World is an action role-playing game developed and published by Capcom and the fifth mainline installment in the Monster Hunter series.', 29.99, 15489874, 4),
 			('Left 4 Dead 2', 
-			'Left 4 Dead 2 is a 2009 multiplayer survival horror game developed and published by Valve. ', 9.99, 5638521, 7),
+			'Left 4 Dead 2 is a 2009 multiplayer survival horror game developed and published by Valve. ', 9.99, 5638521, 3),
 			('DayZ', 
 			'DayZ is a survival video game developed and published by Bohemia Interactive.', 44.99, 6398521, 4),
 			('Fallout 4', 
@@ -80,11 +80,29 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('Sea Of Thieves', 
 			'Sea of Thieves is a 2018 action-adventure game developed by Rare and published by Microsoft Studios. ', 39.99, 11258963, 5),
 			('Assassin''s Creed Odyssey', 
-			'Assassin''s Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft.', 59.99, 9632581, 3)
+			'Assassin''s Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft.', 59.99, 9632581, 3),
+			('Outriders',
+			'Discover the hostile planet of Enoch as you embark on a journey to the source of a mysterious signal. INTENSE SHOOTER, DEEP RPG.', 59.99, 1492810, 5),
+			('Halo 3',
+			'Halo 3 is a 2007 first-person shooter game developed by Bungie for the Xbox 360 console', 15.00, 20032910, 6),
+			('Civilization V',
+			'Sid Meier''s Civilization V is a 4X video game in the Civilization series developed by Firaxis Games.', 30.00, 12032120, 9),
+			('Civilization VI',
+			'Sid Meier''s Civilization VI is a turn-based strategy 4X video game developed by Firaxis Games', 60.00, 8153214, 1),
+			('Rocket League', 
+			'Rocket League is a vehicular soccer video game developed and published by Psyonix', 24.99, 9658210, 6),
+			('Mount & Blade: Warband',
+			'Mount & Blade: Warband is the standalone expansion pack to the strategy action role-playing video game Mount & Blade.', 14.99, 532104, 10),
+			('NBA 2K',
+			'NBA 2K is a series of basketball sports simulation video games developed and released annually since 1999.', 59.99, 169203127, 0),
+			('Madden NFL',
+			'Madden NFL is an American football video game series developed by EA Tiburon for EA Sports. ', 59.99, 251203000, 0),
+			('Clash Of Clans', 
+			'Clash of Clans is a freemium mobile strategy video game developed and published by Finnish game developer Supercell.', 0.00, 532012000, 0)
 
 	GO
 
 
 -- this is our default user!
-exec registerUser 'DogeLord', 'This1sMyRealPa$$word', 6969696.00, 2
+exec registerUser 'DogeLord', 'password', 6969696.00, 2
 -- exec loginUser 'DogeLord', 'This1sMyRealPa$$word'

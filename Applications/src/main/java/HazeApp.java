@@ -1,3 +1,4 @@
+import DbClasses.ApplicationsTableModel;
 import DbClasses.User;
 
 import javax.swing.*;
@@ -52,7 +53,9 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
-        scrollPane = conn.getAppsPane(1, 1);
+        JTable appsTable = conn.getAppsTable(ApplicationsTableModel.ORDER_BY_NAME, 1);
+        HazeApp.scrollPane = new JScrollPane(appsTable);
+        HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
         panel.add(scrollPane);
         // create the text area that will display the description of the app
         appDesc = new JTextArea("App: Click on an app to reveal! \n\nDescription: ");
@@ -223,12 +226,20 @@ public class HazeApp {
 
     /**
      * displays whether we successfully logged in, signed out
+     * An empty displayString parameter clears the success label of our jframe
      * @param displayString sets the display to either a successful login/logout or unsuccessful
      * @param isSuccess sets the color, red or green
      */
     public static void displaySuccess(String displayString, boolean isSuccess) {
-        if(displayCreatedSuccess != null)
+        if(displayCreatedSuccess != null) {
             panel.remove(displayCreatedSuccess);
+            // if the string is empty, we just want to clear the success label of our panel
+            if(displayString.isEmpty()) {
+                displayCreatedSuccess = null;
+                return;
+            }
+        }
+
         displayCreatedSuccess = new JLabel(displayString);
         displayCreatedSuccess.setBounds(230, 50, 300, 25);
         if(isSuccess)
@@ -267,7 +278,7 @@ public class HazeApp {
         if(currUser.getAccessLevelInt() == 2 ) {
             //This1sMyRealPa$$word admin example
             JButton openAdminInterface = new JButton("Open Admin Panel");
-            openAdminInterface.setBounds(10, 390, 140, 25);
+            openAdminInterface.setBounds(415, 390, 180, 25);
             panel.add(openAdminInterface);
         }
 

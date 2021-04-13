@@ -7,12 +7,14 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class SqlServerConnection implements ConnectionProvider {
@@ -39,12 +41,11 @@ public class SqlServerConnection implements ConnectionProvider {
         return ds.getConnection();
     }
 
-
     /**
      * @return returns an apps table
      * @throws SQLException if the statement screws up
      */
-    public JScrollPane getAppsPane(int order, int isAsc) throws SQLException {
+    public JTable getAppsTable(int order, int isAsc) throws SQLException {
         conn = getConnection();
 
         // a rectangle of arraylists
@@ -73,10 +74,10 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order-1, isAsc == 1);
+        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order, isAsc == 1);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
-        // set table
+        // set table column dimensions and format numbers to be in the center of the column
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         appsTable.setDefaultRenderer(Integer.class, centerRenderer);
@@ -84,6 +85,9 @@ public class SqlServerConnection implements ConnectionProvider {
         appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
         appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
         appsTable.getColumnModel().getColumn(3).setPreferredWidth(40);
+        // set font and size for better table readability
+        appsTable.setRowHeight(24);
+        appsTable.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
         // add mouse listener to the header of this table to completely get a new table
         appsTable.getTableHeader().addMouseListener(new MouseAdapter() {
@@ -92,13 +96,13 @@ public class SqlServerConnection implements ConnectionProvider {
                 int col = appsTable.columnAtPoint(e.getPoint());
                 // set appsTable to the new table model
                 HazeApp.panel.remove(HazeApp.scrollPane);
-
                 try {
-                    HazeApp.scrollPane = getAppsPane(col+1, model.getIsAsc());
+                    JTable appsTable = getAppsTable(col, model.getIsAsc());
+                    HazeApp.scrollPane = new JScrollPane(appsTable);
+                    HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
                     HazeApp.panel.add(HazeApp.scrollPane);
                     HazeApp.panel.repaint();
                     HazeApp.panel.invalidate();
-
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -121,69 +125,30 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
                     textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
-                    textAreaString += clickedApp.getNumDownloads() + "\n\nHaze Rating (1-10): ";
-                    textAreaString += clickedApp.getRating();
+                    // format number of downloads with commas
+                    DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
+                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (1-10): ";
+                    int rating = clickedApp.getRating();
+                    textAreaString += rating;
+                    // Special ratings, display whether it is good or bad!
+                    if(rating == 10)
+                        HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games ＜(。_。)＞", true);
+                    else if (rating == 0)
+                        HazeApp.displaySuccess("Gambling for kids! Beware parents credit card", false);
+                    else if (rating == -1)
+                        HazeApp.displaySuccess("Battle Royales are trash (ಠ_ಠ)", false);
+                    else if (rating == 1)
+                        HazeApp.displaySuccess("Huge Disappointment for Doge \uD83D\uDE14", false);
+                    else  HazeApp.displaySuccess("", false);
                     HazeApp.appDesc.setText(textAreaString);
+                    HazeApp.appDesc.repaint();
                 }
             }
         });
-        JScrollPane scrollPane= new JScrollPane(appsTable);
-        scrollPane.setBounds(10, 80, 350, 300 );
-        return scrollPane;
-    }
+        // create scroll pane and set the bounds
 
-    private ArrayList<App> getAppsList(int order, boolean isAsc) throws SQLException {
-        conn = getConnection();
-        ArrayList<App> appsList = new ArrayList<App>();
-        String call = "{call getApps(?, ?)}";
-        try (CallableStatement stmt = conn.prepareCall(call)) {
-            // set order and isAsc to true
-            stmt.setInt(1, order);
-            int isAscInt = (isAsc) ? 0 : 1;
-            stmt.setInt(2, isAscInt);
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                ResultSet rs = stmt.getResultSet();
-                while (rs.next()) {
-                    int id = rs.getInt(1);
-                    String name = rs.getString(2);
-                    String desc = rs.getString(3);
-                    double price = rs.getDouble(4);
-                    int numDownloads = rs.getInt(5);
-                    int rating = rs.getInt(6);
-                    App currInfo = new App(id, name, desc, price, numDownloads, rating);
-                    appsList.add(currInfo);
-                }
-            }
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return appsList;
-    }
-
-    public String[] getApps() throws SQLException {
-        conn = getConnection();
-        ArrayList<String> appsList = new ArrayList<>();
-        String call = "SELECT Apps.appName FROM Apps";
-        try (CallableStatement stmt = conn.prepareCall(call)) {
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                ResultSet rs = stmt.getResultSet();
-                while (rs.next()) {
-                    appsList.add(rs.getString(1));
-                }
-            }
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        String[] appArr = new String[appsList.size()];
-        appArr = appsList.toArray(appArr);
-        return appArr;
-    }
+        return appsTable;
+    } // end getScrollPane method
 
     /**
      * Registers a user into the system if it exists

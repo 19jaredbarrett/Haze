@@ -1,11 +1,11 @@
 ﻿/*
 
 	------------------------getApps
-	@order 1-3
-	1: we sort by name
-	2: we sort by price
-	3: we sort by numDownloads
-	4: we sort by rating
+	@order 0-3
+	0: we sort by name
+	1: we sort by price
+	2: we sort by numDownloads
+	3: we sort by rating
 
 	@isAsc : 
 	0: ascending order
@@ -17,14 +17,14 @@ ALTER PROCEDURE getApps
 	@isAsc	BIT
 	AS
 	BEGIN
-		IF	(@order = 1) AND 
+		IF	(@order = 0) AND 
 			(@isAsc = 0)
 		BEGIN
 		-- order by name, descending
 			SELECT	*
 			FROM Apps	a
 			ORDER BY a.appName DESC, a.numDownloads DESC
-		END ELSE IF (@order = 1) AND
+		END ELSE IF (@order = 0) AND
 					(@isAsc = 1)
 		BEGIN
 		-- order by name, ascending
@@ -32,42 +32,42 @@ ALTER PROCEDURE getApps
 			FROM Apps	a
 			ORDER BY a.appName ASC, a.numDownloads DESC
 
-		END ELSE IF (@order = 2) AND
+		END ELSE IF (@order = 1) AND
 					(@isAsc = 0) 
 		BEGIN
 		-- order by price, descending
 			SELECT	*
 			FROM Apps	a
 			ORDER BY a.price	DESC, a.appName DESC
-		END ELSE IF (@order = 2) AND
+		END ELSE IF (@order = 1) AND
 					(@isAsc = 1) 
 		BEGIN
 		-- order by price, Ascending
 			SELECT	*
 			FROM Apps	a
 			ORDER BY a.price	ASC, a.appName DESC
-		END ELSE IF (@order = 3) AND
+		END ELSE IF (@order = 2) AND
 					(@isAsc = 0) 
 		BEGIN
 		-- order by numDownloads, Descending
 			SELECT	*
 			FROM Apps	a
 			ORDER BY a.numDownloads DESC, a.appName DESC
-		END ELSE IF (@order = 3) AND
+		END ELSE IF (@order = 2) AND
 					(@isAsc = 1) 
 		BEGIN
 		-- order by numDownloads, Descending
 			SELECT	*
 			FROM Apps	a
 			ORDER BY a.numDownloads ASC, a.appName DESC
-		END ELSE IF	(@order = 4) AND 
+		END ELSE IF	(@order = 3) AND 
 					(@isAsc = 0)
 		BEGIN
 		-- order by rating, descending
 		SELECT	*
 			FROM Apps	a
 			ORDER BY a.rating DESC, a.appName DESC
-		END ELSE IF	(@order = 4) AND 
+		END ELSE IF	(@order = 3) AND 
 					(@isAsc = 1)
 		BEGIN
 		-- order by rating, ascending
