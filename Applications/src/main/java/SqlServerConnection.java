@@ -42,6 +42,8 @@ public class SqlServerConnection implements ConnectionProvider {
     }
 
     /**
+     * Get an apps Table based on ORDER_BY_NAME through ORDER_BY_RATING and isAsc
+     * In case of collision, order by name descending
      * @return returns an apps table
      * @throws SQLException if the statement screws up
      */
