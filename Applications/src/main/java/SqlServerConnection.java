@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.event.MouseEvent;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -77,6 +78,14 @@ public class SqlServerConnection implements ConnectionProvider {
         ApplicationsTableModel model = new ApplicationsTableModel(appsList);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
+        // set table
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        appsTable.setDefaultRenderer(Integer.class, centerRenderer);
+        appsTable.setDefaultRenderer(Double.class, centerRenderer);
+        appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
+        appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
+        appsTable.getColumnModel().getColumn(3).setPreferredWidth(30);
         // add mouse listener for when the user clicks a cell
         appsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -93,7 +102,8 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
                     textAreaString += clickedApp.getDescription()+ "\n\nPrice: ";
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
-                    textAreaString += clickedApp.getNumDownloads();
+                    textAreaString += clickedApp.getNumDownloads() + "\n\nHaze Rating (1-10): ";
+                    textAreaString += clickedApp.getRating();
                     HazeApp.appDesc.setText(textAreaString);
                 }
             }

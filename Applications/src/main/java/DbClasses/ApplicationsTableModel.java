@@ -74,7 +74,7 @@ public class ApplicationsTableModel extends AbstractTableModel {
         else if(2 == columnIndex) {
             return row.getNumDownloads();
         } else if (3 == columnIndex) {
-
+            return row.getRating();
         }
         return null;
     }
