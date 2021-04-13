@@ -133,6 +133,7 @@ public class SqlServerConnection implements ConnectionProvider {
                         HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games", true);
                     else  HazeApp.displaySuccess("", false);
                     HazeApp.appDesc.setText(textAreaString);
+                    HazeApp.panel.repaint();
                 }
             }
         });

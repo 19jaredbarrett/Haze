@@ -229,9 +229,11 @@ public class HazeApp {
     public static void displaySuccess(String displayString, boolean isSuccess) {
         if(displayCreatedSuccess != null) {
             panel.remove(displayCreatedSuccess);
-            if(displayString.isEmpty())
+            // if the string is empty, we just want to clear the success label of our panel
+            if(displayString.isEmpty()) {
                 displayCreatedSuccess = null;
-            return;
+                return;
+            }
         }
 
         displayCreatedSuccess = new JLabel(displayString);
