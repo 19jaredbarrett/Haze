@@ -125,7 +125,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
                     textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
-                    textAreaString += clickedApp.getNumDownloads() + "\n\nHaze Rating (1-10): ";
+                    textAreaString += clickedApp.getNumDownloads() + "\n\nDoge's review (1-10): ";
                     textAreaString += clickedApp.getRating();
                     HazeApp.appDesc.setText(textAreaString);
                 }
