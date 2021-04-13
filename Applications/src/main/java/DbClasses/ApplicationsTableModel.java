@@ -12,12 +12,9 @@ public class ApplicationsTableModel extends AbstractTableModel {
     private final ArrayList<App> appsTable;
     // keeps track if we are ascending right now or descending
     private boolean isAsc;
-    private int currentApp;
+    private int sortedApp;
 
-    private final String[] columnNames = new String[] {
-            // extra character to
-            "Name ↓", "Price  ", "Downloads  ", "Rating  "
-    };
+    private String[] columnNames;
     private final Class[] columnClass = new Class[] {
             String.class, Double.class, Integer.class, Integer.class
     };
@@ -27,44 +24,55 @@ public class ApplicationsTableModel extends AbstractTableModel {
      * Method that updates the current ascending or descending value
      * current app is 1-4, name: 1, price: 2, downloads: 3, rating 4
      * the user just clicked a table header
-     * @param appPressed the app the user just pressed
      * @return
      */
-    public int getIsAsc(int appPressed) {
-        // remove arrow at the end
-        columnNames[currentApp] = columnNames[currentApp].substring(0, columnNames[currentApp].length()-1);
-        String arrowChar;
-        int returnVal;
-        if(isAsc) {
-            arrowChar = "↑";
-            returnVal = 1;
-            isAsc = false;
+    public int getIsAsc() {
 
-        } else {
-            returnVal = 0;
-            arrowChar = "↓";
-            isAsc = true;
-        }
-        columnNames[appPressed] = columnNames[appPressed].substring(0, columnNames[appPressed].length()-1) + arrowChar;
-        currentApp = appPressed;
-
-        return returnVal;
+        // return the opposite of whatever the current status is
+        if(isAsc)
+            return 0;
+        else return 1;
     }
 
 
 
-    public boolean isAsc() {
-        return isAsc;
-    }
 
     public void setAsc(boolean asc) {
         isAsc = asc;
     }
 
-    public ApplicationsTableModel(ArrayList<App> appsTable) {
+    public ApplicationsTableModel(ArrayList<App> appsTable, int sortedApp, boolean isAsc  ) {
         this.appsTable = appsTable;
-        this.isAsc = true;
-        currentApp = 1;
+        this.sortedApp = sortedApp;
+        this.isAsc = isAsc;
+        setColumnNames();
+
+    }
+    private void setColumnNames() {
+         columnNames = new String[] {
+                "Name", "Price", "Downloads", "Rating"
+        };
+         switch (sortedApp) {
+             case 0:
+                 if(isAsc) columnNames[0] += " ↑";
+                 else columnNames[0] += " ↓";
+                 break;
+             case 1:
+                 if(isAsc)
+                     columnNames[1] += " ↑";
+                 else columnNames[1] += " ↓";
+                 break;
+             case 2:
+                 if(isAsc)
+                     columnNames[2] += " ↑";
+                 else columnNames[2] += " ↓";
+                 break;
+             case 3:
+                 if(isAsc)
+                     columnNames[3] += " ↑";
+                 else columnNames[3] += " ↓";
+                 break;
+         }
     }
     @Override
     public String getColumnName(int column)

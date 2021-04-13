@@ -52,8 +52,8 @@ public class SqlServerConnection implements ConnectionProvider {
         String call = "{call getApps(?, ?)}";
         try (CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
-            stmt.setInt(1, 1);
-            stmt.setInt(2, 1);
+            stmt.setInt(1, order);
+            stmt.setInt(2, isAsc);
             boolean hasResult = stmt.execute();
             if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
@@ -73,7 +73,7 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        ApplicationsTableModel model = new ApplicationsTableModel(appsList);
+        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order-1, isAsc == 1);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
         // set table
@@ -83,19 +83,18 @@ public class SqlServerConnection implements ConnectionProvider {
         appsTable.setDefaultRenderer(Double.class, centerRenderer);
         appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
         appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
-        appsTable.getColumnModel().getColumn(3).setPreferredWidth(30);
+        appsTable.getColumnModel().getColumn(3).setPreferredWidth(40);
 
         // add mouse listener to the header of this table to completely get a new table
         appsTable.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int col = appsTable.columnAtPoint(e.getPoint());
-                int isAsc = model.getIsAsc(col);
                 // set appsTable to the new table model
                 HazeApp.panel.remove(HazeApp.scrollPane);
 
                 try {
-                    HazeApp.scrollPane = getAppsPane(col+1, isAsc);
+                    HazeApp.scrollPane = getAppsPane(col+1, model.getIsAsc());
                     HazeApp.panel.add(HazeApp.scrollPane);
                     HazeApp.panel.repaint();
                     HazeApp.panel.invalidate();
@@ -103,8 +102,6 @@ public class SqlServerConnection implements ConnectionProvider {
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-                String name = appsTable.getColumnName(col);
-                System.out.println("Column index selected " + col + " " + name);
             }
 
         });
