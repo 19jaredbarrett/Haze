@@ -13,6 +13,10 @@ public class ApplicationsTableModel extends AbstractTableModel {
     // keeps track if we are ascending right now or descending
     private boolean isAsc;
     private int sortedApp;
+    public static final int ORDER_BY_NAME = 0;
+    public static final int ORDER_BY_PRICE = 1;
+    public static final int ORDER_BY_DOWNLOADS = 2;
+    public static final int ORDER_BY_RATING = 3;
 
     private String[] columnNames;
     private final Class[] columnClass = new Class[] {
@@ -22,7 +26,7 @@ public class ApplicationsTableModel extends AbstractTableModel {
 
     /**
      * Method that updates the current ascending or descending value
-     * current app is 1-4, name: 1, price: 2, downloads: 3, rating 4
+     * current app is 1-4, name: 0, price: 1, downloads: 2, rating 3
      * the user just clicked a table header
      * @return
      */
@@ -53,21 +57,21 @@ public class ApplicationsTableModel extends AbstractTableModel {
                 "Name", "Price", "Downloads", "Rating"
         };
          switch (sortedApp) {
-             case 0:
+             case ORDER_BY_NAME:
                  if(isAsc) columnNames[0] += " ↑";
                  else columnNames[0] += " ↓";
                  break;
-             case 1:
+             case ORDER_BY_PRICE:
                  if(isAsc)
                      columnNames[1] += " ↑";
                  else columnNames[1] += " ↓";
                  break;
-             case 2:
+             case ORDER_BY_DOWNLOADS:
                  if(isAsc)
                      columnNames[2] += " ↑";
                  else columnNames[2] += " ↓";
                  break;
-             case 3:
+             case ORDER_BY_RATING:
                  if(isAsc)
                      columnNames[3] += " ↑";
                  else columnNames[3] += " ↓";

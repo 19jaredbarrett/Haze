@@ -74,7 +74,7 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order-1, isAsc == 1);
+        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order, isAsc == 1);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
         // set table column dimensions and format numbers to be in the center of the column
@@ -97,7 +97,7 @@ public class SqlServerConnection implements ConnectionProvider {
                 // set appsTable to the new table model
                 HazeApp.panel.remove(HazeApp.scrollPane);
                 try {
-                    JTable appsTable = getAppsTable(col+1, model.getIsAsc());
+                    JTable appsTable = getAppsTable(col, model.getIsAsc());
                     HazeApp.scrollPane = new JScrollPane(appsTable);
                     HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
                     HazeApp.panel.add(HazeApp.scrollPane);

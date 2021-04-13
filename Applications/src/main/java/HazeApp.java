@@ -1,3 +1,4 @@
+import DbClasses.ApplicationsTableModel;
 import DbClasses.User;
 
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
-        JTable appsTable = conn.getAppsTable(1, 1);
+        JTable appsTable = conn.getAppsTable(ApplicationsTableModel.ORDER_BY_NAME, 1);
         HazeApp.scrollPane = new JScrollPane(appsTable);
         HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
         panel.add(scrollPane);
