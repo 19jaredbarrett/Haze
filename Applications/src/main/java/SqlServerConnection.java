@@ -7,6 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.CallableStatement;
@@ -84,6 +85,9 @@ public class SqlServerConnection implements ConnectionProvider {
         appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
         appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
         appsTable.getColumnModel().getColumn(3).setPreferredWidth(40);
+        // set font and size for better table readability
+        appsTable.setRowHeight(24);
+        appsTable.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
         // add mouse listener to the header of this table to completely get a new table
         appsTable.getTableHeader().addMouseListener(new MouseAdapter() {

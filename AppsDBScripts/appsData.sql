@@ -88,7 +88,7 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('Civilization V',
 			'Sid Meier''s Civilization V is a 4X video game in the Civilization series developed by Firaxis Games.', 30.00, 50321520, 9),
 			('Civilization VI',
-			'Sid Meier''s Civilization VI is a turn-based strategy 4X video game developed by Firaxis Games', 60.00, 201532014, 0),
+			'Sid Meier''s Civilization VI is a turn-based strategy 4X video game developed by Firaxis Games', 60.00, 201532014, 1),
 			('Rocket League', 
 			'Rocket League is a vehicular soccer video game developed and published by Psyonix', 24.99, 9658210, 6)
 
