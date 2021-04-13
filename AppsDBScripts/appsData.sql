@@ -80,11 +80,21 @@ VALUES 		('Counter-Strike: Global Offensive',
 			('Sea Of Thieves', 
 			'Sea of Thieves is a 2018 action-adventure game developed by Rare and published by Microsoft Studios. ', 39.99, 11258963, 5),
 			('Assassin''s Creed Odyssey', 
-			'Assassin''s Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft.', 59.99, 9632581, 3)
+			'Assassin''s Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft.', 59.99, 9632581, 3),
+			('Outriders',
+			'Discover the hostile planet of Enoch as you embark on a journey to the source of a mysterious signal. INTENSE SHOOTER, DEEP RPG.', 59.99, 1492810, 5),
+			('Halo 3',
+			'Halo 3 is a 2007 first-person shooter game developed by Bungie for the Xbox 360 console', 15.00, 20032910, 9),
+			('Civilization V',
+			'Sid Meier''s Civilization V is a 4X video game in the Civilization series developed by Firaxis Games.', 30.00, 50321520, 9),
+			('Civilization VI',
+			'Sid Meier''s Civilization VI is a turn-based strategy 4X video game developed by Firaxis Games', 60.00, 201532014, 0),
+			('Rocket League', 
+			'Rocket League is a vehicular soccer video game developed and published by Psyonix', 24.99, 9658210, 6)
 
 	GO
 
 
 -- this is our default user!
-exec registerUser 'DogeLord', 'This1sMyRealPa$$word', 6969696.00, 2
+exec registerUser 'DogeLord', 'password', 6969696.00, 2
 -- exec loginUser 'DogeLord', 'This1sMyRealPa$$word'

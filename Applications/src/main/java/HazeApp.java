@@ -267,7 +267,7 @@ public class HazeApp {
         if(currUser.getAccessLevelInt() == 2 ) {
             //This1sMyRealPa$$word admin example
             JButton openAdminInterface = new JButton("Open Admin Panel");
-            openAdminInterface.setBounds(10, 390, 140, 25);
+            openAdminInterface.setBounds(415, 390, 180, 25);
             panel.add(openAdminInterface);
         }
 

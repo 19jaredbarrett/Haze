@@ -76,7 +76,7 @@ public class SqlServerConnection implements ConnectionProvider {
         ApplicationsTableModel model = new ApplicationsTableModel(appsList, order-1, isAsc == 1);
         // create the tabel and return it
         JTable appsTable = new JTable(model);
-        // set table
+        // set table column dimensions and format numbers to be in the center of the column
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         appsTable.setDefaultRenderer(Integer.class, centerRenderer);
@@ -127,10 +127,11 @@ public class SqlServerConnection implements ConnectionProvider {
                 }
             }
         });
+        // create scroll pane and set the bounds
         JScrollPane scrollPane= new JScrollPane(appsTable);
-        scrollPane.setBounds(10, 80, 350, 300 );
+        scrollPane.setBounds(10, 80, 350, 450 );
         return scrollPane;
-    }
+    } // end getScrollPane method
 
     private ArrayList<App> getAppsList(int order, boolean isAsc) throws SQLException {
         conn = getConnection();
