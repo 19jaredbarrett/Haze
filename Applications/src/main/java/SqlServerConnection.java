@@ -136,7 +136,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     if(rating == 10)
                         HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games ＜(。_。)＞", true);
                     else if (rating == 0)
-                        HazeApp.displaySuccess("Gambling for kids! Beware parents credit card", false);
+                        HazeApp.displaySuccess("Gambling for kids! Beware...", false);
                     else if (rating == -1)
                         HazeApp.displaySuccess("Battle Royales are trash (ಠ_ಠ)", false);
                     else if (rating == 1)

@@ -38,7 +38,7 @@ public class HazeApp {
      */
     public static void displayHomePage(boolean loggedIn) throws SQLException {
         panel.setLayout(null);
-        panel.setBackground(Color.LIGHT_GRAY);
+        panel.setBackground(Color.lightGray);
         clearPanel();
         if(loggedIn)
             updateUserInterfaceLoggedIn();
@@ -237,16 +237,20 @@ public class HazeApp {
             // if the string is empty, we just want to clear the success label of our panel
             if(displayString.isEmpty()) {
                 displayCreatedSuccess = null;
+                panel.repaint();
                 return;
             }
-        }
-
+        } else if(displayString.isEmpty())
+            return;
         displayCreatedSuccess = new JLabel(displayString);
         displayCreatedSuccess.setBounds(230, 50, 300, 25);
         if(isSuccess)
             displayCreatedSuccess.setForeground(Color.BLUE);
         else
             displayCreatedSuccess.setForeground(Color.RED);
+        displayCreatedSuccess.setFont(new Font("Helvetica", Font.BOLD, 13));
+        displayCreatedSuccess.setBackground(new Color(1f,1f,1f,0.5f));
+        displayCreatedSuccess.setOpaque(true);
         panel.add(displayCreatedSuccess);
         panel.repaint();
     }
