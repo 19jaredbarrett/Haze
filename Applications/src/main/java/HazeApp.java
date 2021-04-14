@@ -38,6 +38,7 @@ public class HazeApp {
      */
     public static void displayHomePage(boolean loggedIn) throws SQLException {
         panel.setLayout(null);
+        panel.setBackground(Color.LIGHT_GRAY);
         clearPanel();
         if(loggedIn)
             updateUserInterfaceLoggedIn();
@@ -280,6 +281,7 @@ public class HazeApp {
             JButton openAdminInterface = new JButton("Open Admin Panel");
             openAdminInterface.setBounds(415, 390, 180, 25);
             panel.add(openAdminInterface);
+            panel.setBackground(Color.pink);
         }
 
         JButton signOutButton = new JButton("Sign Out");
