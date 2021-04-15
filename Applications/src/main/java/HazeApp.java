@@ -325,17 +325,19 @@ public class HazeApp {
                     displaySuccess("Provide a search string please!", false);
                 else if(searchString.length() > 100)
                     displaySuccess("LESS THAN 100 CHARS", false);
-                else
+                else {
                     displaySuccess("Searching...¯\\_(ツ)_/¯ \uD83E\uDD14", true);
-                panel.remove(scrollPane);
-                try {
-                    scrollPane = new JScrollPane(conn.getAppsTable(searchString));
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    panel.remove(scrollPane);
+                    try {
+                        scrollPane = new JScrollPane(conn.getAppsTable(searchString));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    scrollPane.setBounds(10, 80, 350, 450 );
+                    panel.add(scrollPane);
+                    panel.repaint();
                 }
-                scrollPane.setBounds(10, 80, 350, 450 );
-                panel.add(scrollPane);
-                panel.repaint();
+
             }
         });
         panel.add(searchBtn);
