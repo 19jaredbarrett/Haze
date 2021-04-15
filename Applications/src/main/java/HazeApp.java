@@ -310,7 +310,7 @@ public class HazeApp {
     }
 
     /**
-     * Adds action listener for search button
+     * Adds search button to our program!
      */
     private static void addSearchButton() {
         JTextField searchText = new JTextField(20);
