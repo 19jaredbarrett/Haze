@@ -1,3 +1,4 @@
+import DbClasses.App;
 import DbClasses.ApplicationsTableModel;
 import DbClasses.User;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SqlServerConnectionTest {
     SqlServerConnection conn = new SqlServerConnection();
+    App currentApp = new App(0, null, null, 0, 0, 0);
 
     @Test
     void getAppsTable() throws SQLException {
@@ -60,6 +62,13 @@ class SqlServerConnectionTest {
     }
 
     @Test
-    void getApps() {
+    void getApps()throws SQLException {
+    	App dota = new App(2,"Dota2","A famous 5V5 Moba Game.",0,5000000,10);
+    	conn.setCurrentApp(dota);
+    	assertEquals(dota,conn.getCurrentApp());
+    	
+    	App darksouls = new App(1,"DarkSouls3","A third-person fighting game, which is very hard",49,1000000,10);
+    	conn.setCurrentApp(darksouls);
+    	assertEquals(darksouls,conn.getCurrentApp());
     }
 }
