@@ -117,3 +117,15 @@ END
 GO
 
 -- EXEC loginUser 'DogeLord'
+
+-- Procedure searchApps returns a table with rows  that contains the given substring
+ALTER PROCEDURE searchApps
+	@searchString		VARCHAR(100)
+AS BEGIN
+	SELECT *
+	FROM Apps
+	WHERE UPPER(Apps.appName) LIKE UPPER(CONCAT('%',@searchString, '%'))
+	ORDER BY Apps.appName
+END
+
+exec searchApps 'mount'
