@@ -64,6 +64,8 @@ public class HazeApp {
         appDesc.setLineWrap(true);
         appDesc.setWrapStyleWord(true);
         panel.add(appDesc);
+        // add search functionality!
+        addSearchButton();
     }
 
 
@@ -305,6 +307,28 @@ public class HazeApp {
         panel.add(signOutButton);
         frame.invalidate();
         frame.repaint();
+    }
+
+    /**
+     * Adds action listener for search button
+     */
+    private static void addSearchButton() {
+        JTextField searchText = new JTextField(20);
+        searchText.setBounds(100, 540, 165, 25);
+        JButton searchBtn = new JButton("Search");
+        searchBtn.setBounds(10, 540,85,25);
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                String searchString = searchText.getText();
+                if(searchString.isEmpty())
+                    displaySuccess("Provide a search string please!", false);
+                else
+                    displaySuccess("Searching...¯\\_(ツ)_/¯ \uD83E\uDD14", true);
+            }
+        });
+        panel.add(searchBtn);
+        panel.add(searchText);
     }
 
 
