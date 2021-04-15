@@ -44,7 +44,16 @@ class SqlServerConnectionTest {
     // TODO call conn.getAppsTable(String inputString)
     @Test
     void searchApps() throws SQLException {
-
+        // mount & blade bannerlord and mount & blade warband
+        JTable appsTable =  conn.getAppsTable("mount");
+        // assert there is  38 rows
+        assertEquals(2,appsTable.getRowCount());
+        assertEquals(4, appsTable.getColumnCount());
+        // bannerlord
+        assertEquals("Mount & Blade II: Bannerlord",appsTable.getValueAt(0, 0));
+        assertEquals(49.99,(double)appsTable.getValueAt(0, 1), 0.001);
+        assertEquals(992219,(int)appsTable.getValueAt(0, 2));
+        assertEquals(7,(int)appsTable.getValueAt(0, 3));
     }
 
     @Test

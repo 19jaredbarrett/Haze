@@ -21,7 +21,9 @@ public class SqlServerConnection implements ConnectionProvider {
     private static final HikariConfig conf = new HikariConfig();
     private static HikariDataSource ds;
     private static Connection conn;
+    private JTable appsTable;
     private User currentUser;
+    private ApplicationsTableModel model;
     private App currentApp;
 
     //HazePa$$word123
@@ -49,7 +51,6 @@ public class SqlServerConnection implements ConnectionProvider {
      */
     public JTable getAppsTable(int order, int isAsc) throws SQLException {
         conn = getConnection();
-
         // a rectangle of arraylists
         ArrayList<App> appsList = new ArrayList<App>();
         String call = "{call getApps(?, ?)}";
@@ -76,9 +77,124 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order, isAsc == 1);
+        model = new ApplicationsTableModel(appsList, order, isAsc == 1);
         // create the tabel and return it
-        JTable appsTable = new JTable(model);
+        appsTable = new JTable(model);
+        addTableFeatures();
+        return appsTable;
+    } // end getApps method
+
+    /**
+     * OVERLOADING METHOD
+     * This gets an apps table based on a searchString
+     * @param searchString the string we want to search
+     * @return  apps table with apps that contain the substring: searchString
+     * @throws SQLException statement fails
+     */
+    public JTable getAppsTable(String searchString) throws SQLException {
+        conn = getConnection();
+
+        // a rectangle of arraylists
+        ArrayList<App> appsList = new ArrayList<App>();
+        String call = "{call searchApps(?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setString(1, searchString);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    String name = rs.getString(2);
+                    String desc = rs.getString(3);
+                    double price = rs.getDouble(4);
+                    int numDownloads = rs.getInt(5);
+                    int rating = rs.getInt(6);
+                    currentApp = new App(id, name, desc, price, numDownloads, rating);
+                    appsList.add(currentApp);
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        model = new ApplicationsTableModel(appsList, ApplicationsTableModel.ORDER_BY_NAME, true);
+        // create the tabel and return it
+        appsTable = new JTable(model);
+        addTableFeatures();
+        return appsTable;
+    } // end getApps method
+
+    /**
+     * Registers a user into the system if it exists
+     *
+     * @param username
+     * @return
+     * @throws SQLException
+     */
+    public boolean registerUser(String username, char[] pass) throws SQLException {
+        conn = getConnection();
+        User u = new User(username, pass);
+        boolean isSuccess = false;
+        String call = "{call registerUser(?, ?, ?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setString(1, u.getUsername());
+            stmt.setString(2, String.valueOf(pass));
+            stmt.setFloat(3, (float) u.getBalance());
+            stmt.setInt(4, u.getAccessLevelInt());
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                if (rs.next()) {
+                    isSuccess = true;
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return isSuccess;
+    }
+
+    public User loginUser(String username, char[] pass) throws SQLException {
+        // return null if blank objects
+        if (username.isEmpty() || pass.length == 0)
+            return null;
+        conn = getConnection();
+        User u = new User(username, pass);
+        User returnUser = null;
+        String call = "{call loginUser(?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            stmt.setString(1, u.getUsername());
+            stmt.setString(2, String.valueOf(pass));
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                if (rs.next()) {
+                    returnUser = new User(rs.getString(2),
+                            "blank_passsword",
+                            rs.getDouble(4),
+                            rs.getInt(5));
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return returnUser;
+    }
+
+    /**
+     * This method adds the action listeners and sets the width/height of the table
+     * Called by functions getAppsTable(int order, int isAsc) and
+     * getAppsTable(String searchString)
+     */
+    private void addTableFeatures() {
         // set table column dimensions and format numbers to be in the center of the column
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -148,73 +264,7 @@ public class SqlServerConnection implements ConnectionProvider {
             }
         });
         // create scroll pane and set the bounds
-
-        return appsTable;
-    } // end getScrollPane method
-
-    /**
-     * Registers a user into the system if it exists
-     *
-     * @param username
-     * @return
-     * @throws SQLException
-     */
-    public boolean registerUser(String username, char[] pass) throws SQLException {
-        conn = getConnection();
-        User u = new User(username, pass);
-        boolean isSuccess = false;
-        String call = "{call registerUser(?, ?, ?, ?)}";
-        try (CallableStatement stmt = conn.prepareCall(call)) {
-            // set order and isAsc to true
-            stmt.setString(1, u.getUsername());
-            stmt.setString(2, String.valueOf(pass));
-            stmt.setFloat(3, (float) u.getBalance());
-            stmt.setInt(4, u.getAccessLevelInt());
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                ResultSet rs = stmt.getResultSet();
-                if (rs.next()) {
-                    isSuccess = true;
-                }
-            }
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return isSuccess;
     }
-
-    public User loginUser(String username, char[] pass) throws SQLException {
-        // return null if blank objects
-        if (username.isEmpty() || pass.length == 0)
-            return null;
-        conn = getConnection();
-        User u = new User(username, pass);
-        User returnUser = null;
-        String call = "{call loginUser(?, ?)}";
-        try (CallableStatement stmt = conn.prepareCall(call)) {
-            stmt.setString(1, u.getUsername());
-            stmt.setString(2, String.valueOf(pass));
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                ResultSet rs = stmt.getResultSet();
-                if (rs.next()) {
-                    returnUser = new User(rs.getString(2),
-                            "blank_passsword",
-                            rs.getDouble(4),
-                            rs.getInt(5));
-                }
-            }
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return returnUser;
-    }
-
     public User getCurrentUser() {
         return currentUser;
     }

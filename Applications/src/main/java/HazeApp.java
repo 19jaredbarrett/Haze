@@ -323,6 +323,8 @@ public class HazeApp {
                 String searchString = searchText.getText();
                 if(searchString.isEmpty())
                     displaySuccess("Provide a search string please!", false);
+                else if(searchString.length() > 100)
+                    displaySuccess("LESS THAN 100 CHARS", false);
                 else
                     displaySuccess("Searching...¯\\_(ツ)_/¯ \uD83E\uDD14", true);
             }
