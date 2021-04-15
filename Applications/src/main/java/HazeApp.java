@@ -327,6 +327,15 @@ public class HazeApp {
                     displaySuccess("LESS THAN 100 CHARS", false);
                 else
                     displaySuccess("Searching...¯\\_(ツ)_/¯ \uD83E\uDD14", true);
+                panel.remove(scrollPane);
+                try {
+                    scrollPane = new JScrollPane(conn.getAppsTable(searchString));
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                scrollPane.setBounds(10, 80, 350, 450 );
+                panel.add(scrollPane);
+                panel.repaint();
             }
         });
         panel.add(searchBtn);
