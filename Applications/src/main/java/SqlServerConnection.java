@@ -226,5 +226,9 @@ public class SqlServerConnection implements ConnectionProvider {
     public App getCurrentApp() {
         return currentApp;
     }
+    
+    public void setCurrentApp(App currentApp) {
+    	this.currentApp = currentApp;
+    }
 
 }
