@@ -186,6 +186,7 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        currentUser = returnUser;
         return returnUser;
     }
 
@@ -264,6 +265,24 @@ public class SqlServerConnection implements ConnectionProvider {
             }
         });
         // create scroll pane and set the bounds
+    }
+
+    /**
+     * This method attempts to buy an app.
+     * @param boughtApp
+     */
+    public boolean buyApp(App boughtApp) {
+
+        return false;
+    }
+
+    /**
+     * This method gets the current user's apps
+     * @return
+     */
+    public ArrayList<App> getUserApps() {
+
+        return new ArrayList<App>();
     }
     public User getCurrentUser() {
         return currentUser;

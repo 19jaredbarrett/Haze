@@ -1,9 +1,11 @@
+import DbClasses.App;
 import DbClasses.ApplicationsTableModel;
 import DbClasses.User;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,8 +66,37 @@ class SqlServerConnectionTest {
 
     @Test
     void loginUser() throws SQLException {
-        User u = conn.loginUser("DogeLord", new char[] {'T','h','i','s','1','s','M','y','R','e','a','l','P','a','$','$','w','o','r','d'} );
+        User u = conn.loginUser("DogeLord", new char[] {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'} );
         assertEquals("DogeLord", u.getUsername());
+        assertEquals(u, conn.getCurrentUser());
+    }
+    @Test
+    void buyApp() throws SQLException {
+        App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
+        conn.loginUser("DogeLord", new char[] {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'} );
+        assertTrue( conn.buyApp(ex));
+        assertEquals(990.0,conn.getCurrentUser().getBalance(), 0.001);
+        ex = new App(1, "Bannerlord", "You play as a doge!", 50.00, 50504, 0);
+        assertTrue(conn.buyApp(ex));
+        assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);
+        assertFalse(conn.buyApp(null));
+        assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);
+        // price above balance
+        ex = new App(1, "expensive", "very", 5000.00, 4, 0);
+        assertFalse(conn.buyApp(ex));
+        assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);
+    }
+
+    @Test
+    void getUserApps() throws SQLException {
+        conn.registerUser("userTest", new char[] {'t', 't', 't', 't', 't'});
+        conn.loginUser("userTest", new char[] {'t', 't', 't', 't', 't'} );
+        App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
+        conn.buyApp(ex);
+        conn.buyApp(new App(1, "Bannerlord", "You play as a doge!", 50.00, 50504, 0));
+        ArrayList<App> userApps = conn.getUserApps();
+        assertEquals("DogeGame",userApps.get(0).getAppName());
+        assertNull(userApps.get(1));
     }
 
     @Test
