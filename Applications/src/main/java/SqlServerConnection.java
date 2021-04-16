@@ -296,4 +296,7 @@ public class SqlServerConnection implements ConnectionProvider {
         return currentApp;
     }
 
+    public void setCurrentApp(App appChange) {
+        currentApp = appChange;
+    }
 }

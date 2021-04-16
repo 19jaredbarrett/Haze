@@ -89,6 +89,7 @@ class SqlServerConnectionTest {
 
     @Test
     void getUserApps() throws SQLException {
+        User u = new User("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.registerUser("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.loginUser("userTest", new char[] {'t', 't', 't', 't', 't'} );
         App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
@@ -98,6 +99,16 @@ class SqlServerConnectionTest {
         ArrayList<App> userApps = conn.getUserApps();
         assertEquals("DogeGame",userApps.get(0).getAppName());
         assertEquals("Bannerlord",userApps.get(1).getAppName());
+    }
+    @Test
+    void currentApp() {
+        // tests getter/setter for currentApp
+        App dota = new App(2,"Dota2","A famous 5V5 Moba Game.",0,5000000,10);
+        conn.setCurrentApp(dota);
+        assertEquals(dota,conn.getCurrentApp());
+        App darksouls = new App(1,"DarkSouls3","A third-person fighting game, which is very hard",49,1000000,10);
+        conn.setCurrentApp(darksouls);
+        assertEquals(darksouls,conn.getCurrentApp());
 
     }
 

@@ -128,7 +128,5 @@ class AppTest {
 
         trash.setDescription("really trash game");
         assertEquals("really trash game",trash.getDescription());
-
-
     }
 }
