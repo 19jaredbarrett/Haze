@@ -92,14 +92,13 @@ class SqlServerConnectionTest {
         conn.registerUser("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.loginUser("userTest", new char[] {'t', 't', 't', 't', 't'} );
         App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
-        conn.buyApp(ex);
-        conn.buyApp(new App(1, "Bannerlord", "You play as a doge!", 50.00, 50504, 0));
+        // app 1
+        assertTrue(conn.buyApp(ex));
+        conn.buyApp(new App(1, "Bannerlord", "You play as a doge!", 20.00, 50504, 0));
         ArrayList<App> userApps = conn.getUserApps();
         assertEquals("DogeGame",userApps.get(0).getAppName());
-        assertNull(userApps.get(1));
+        assertEquals("Bannerlord",userApps.get(1).getAppName());
+
     }
 
-    @Test
-    void getApps() {
-    }
 }
