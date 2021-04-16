@@ -9,16 +9,14 @@ class AppTest {
     App ds = new App(2, "DarkSouls", "A very simple third-person action game of soul system. Very simple, the enemies inside are easy.", 49.00, 1000000, 10);
     App dota = new App(3, "Dota2", "A MOBA 5V5 game that has been popular all over the world for decades. You can experience all champions for free.", 0, 5000000, 10);
     App trash = new App(4, "TrashGame", "A deceptive junk game. It is not recommended to buy.", 1, 123, 0);
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> Iteration2
+
+
     @org.junit.jupiter.api.Test
     void setId() {
         ex.setId(2);
         assertEquals(2, ex.getId());
-<<<<<<< HEAD
+
         
         ds.setId(2);
         assertEquals( 2,  ds.getId());
@@ -26,7 +24,7 @@ class AppTest {
         dota.setId(5);
         assertEquals( 5,  dota.getId());
         
-=======
+
 
         ds.setId(2);
         assertEquals( 2,  ds.getId());
@@ -34,7 +32,6 @@ class AppTest {
         dota.setId(5);
         assertEquals( 5,  dota.getId());
 
->>>>>>> Iteration2
         trash.setId(10);
         assertEquals(10 ,  trash.getId());
     }
@@ -43,15 +40,14 @@ class AppTest {
     void setAppName() {
         ex.setAppName("Doge");
         assertEquals("Doge", ex.getAppName());
-<<<<<<< HEAD
+
         
         ds.setAppName("Dark Souls 3");
         assertEquals("Dark Souls 3", ds.getAppName());
         
         dota.setAppName("Doooooota2");
         assertEquals("Doooooota2", dota.getAppName());
-        
-=======
+
 
         ds.setAppName("Dark Souls 3");
         assertEquals("Dark Souls 3", ds.getAppName());
@@ -59,7 +55,7 @@ class AppTest {
         dota.setAppName("Doooooota2");
         assertEquals("Doooooota2", dota.getAppName());
 
->>>>>>> Iteration2
+
         trash.setAppName("trash");
         assertEquals("trash", trash.getAppName());
     }
@@ -68,7 +64,6 @@ class AppTest {
     void setPrice() {
         ex.setPrice(1000.00);
         assertEquals(1000.00, ex.getPrice());
-<<<<<<< HEAD
         
         ds.setPrice(20);
         assertEquals(20,ds.getPrice());
@@ -76,7 +71,7 @@ class AppTest {
         dota.setPrice(-1);
         assertEquals(-1,dota.getPrice());
         
-=======
+
 
         ds.setPrice(20);
         assertEquals(20,ds.getPrice());
@@ -84,7 +79,7 @@ class AppTest {
         dota.setPrice(-1);
         assertEquals(-1,dota.getPrice());
 
->>>>>>> Iteration2
+
         trash.setPrice(10000);
         assertEquals(10000,trash.getPrice());
     }
@@ -93,23 +88,19 @@ class AppTest {
     void setNumDownloads() {
         ex.setNumDownloads(ex.getNumDownloads()+1);
         assertEquals(50505, ex.getNumDownloads());
-<<<<<<< HEAD
+
         
         ds.setNumDownloads(ds.getNumDownloads()+1);
         assertEquals(1000001, ds.getNumDownloads());
         
         dota.setNumDownloads(dota.getNumDownloads()+1);
         assertEquals(5000001, dota.getNumDownloads());
-        
-=======
 
         ds.setNumDownloads(ds.getNumDownloads()+1);
         assertEquals(1000001, ds.getNumDownloads());
 
         dota.setNumDownloads(dota.getNumDownloads()+1);
         assertEquals(5000001, dota.getNumDownloads());
-
->>>>>>> Iteration2
         trash.setNumDownloads(trash.getNumDownloads()+1);
         assertEquals(124, trash.getNumDownloads());
     }
@@ -163,7 +154,6 @@ class AppTest {
     void setDescription() {
         ex.setDescription("hajkpoisgjiposajgipoas");
         assertEquals("hajkpoisgjiposajgipoas", ex.getDescription());
-<<<<<<< HEAD
         
         ds.setDescription("a very hard game");
         assertEquals("a very hard game",ds.getDescription());
@@ -173,9 +163,6 @@ class AppTest {
         
         trash.setDescription("really trash game");
         assertEquals("really trash game",trash.getDescription());
-        	
-        
-=======
 
         ds.setDescription("a very hard game");
         assertEquals("a very hard game",ds.getDescription());
@@ -185,6 +172,5 @@ class AppTest {
 
         trash.setDescription("really trash game");
         assertEquals("really trash game",trash.getDescription());
->>>>>>> Iteration2
     }
 }

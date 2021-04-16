@@ -299,8 +299,4 @@ public class SqlServerConnection implements ConnectionProvider {
     public void setCurrentApp(App currentApp) {
     	this.currentApp = currentApp;
     }
-
-    public void setCurrentApp(App appChange) {
-        currentApp = appChange;
-    }
 }

@@ -61,7 +61,7 @@ class SqlServerConnectionTest {
 
     @Test
     void registerUser() throws SQLException {
-        User u = new User("testAnothaOne", "sgopikasijpg", 300.0, 1);
+        User u = new User("testAnotherOne", "sgopikasijpg", 300.0, 1);
         assertTrue(conn.registerUser(u.getUsername(), new char[] {'a','b','c'}));
     }
 
@@ -75,7 +75,7 @@ class SqlServerConnectionTest {
     void buyApp() throws SQLException {
         App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
         conn.loginUser("DogeLord", new char[] {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'} );
-        assertTrue( conn.buyApp(ex));
+        assertTrue(conn.buyApp(ex));
         assertEquals(990.0,conn.getCurrentUser().getBalance(), 0.001);
         ex = new App(1, "Bannerlord", "You play as a doge!", 50.00, 50504, 0);
         assertTrue(conn.buyApp(ex));
@@ -89,16 +89,16 @@ class SqlServerConnectionTest {
     }
 
     @Test
-<<<<<<< HEAD
     void getApps()throws SQLException {
-    	App dota = new App(2,"Dota2","A famous 5V5 Moba Game.",0,5000000,10);
-    	conn.setCurrentApp(dota);
-    	assertEquals(dota,conn.getCurrentApp());
-    	
-    	App darksouls = new App(1,"DarkSouls3","A third-person fighting game, which is very hard",49,1000000,10);
-    	conn.setCurrentApp(darksouls);
-    	assertEquals(darksouls,conn.getCurrentApp());
-=======
+        App dota = new App(2, "Dota2", "A famous 5V5 Moba Game.", 0, 5000000, 10);
+        conn.setCurrentApp(dota);
+        assertEquals(dota, conn.getCurrentApp());
+
+        App darksouls = new App(1, "DarkSouls3", "A third-person fighting game, which is very hard", 49, 1000000, 10);
+        conn.setCurrentApp(darksouls);
+        assertEquals(darksouls, conn.getCurrentApp());
+    }
+    @Test
     void getUserApps() throws SQLException {
         User u = new User("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.registerUser("userTest", new char[] {'t', 't', 't', 't', 't'});
@@ -110,7 +110,7 @@ class SqlServerConnectionTest {
         ArrayList<App> userApps = conn.getUserApps();
         assertEquals("DogeGame",userApps.get(0).getAppName());
         assertEquals("Bannerlord",userApps.get(1).getAppName());
->>>>>>> Iteration2
+
     }
     @Test
     void currentApp() {

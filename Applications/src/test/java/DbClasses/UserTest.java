@@ -22,7 +22,7 @@ class UserTest {
 
     @Test
     void setUsername() {
-<<<<<<< HEAD
+
     	u.setUsername("a");
         assertEquals("a", u.getUsername());
         
@@ -35,7 +35,6 @@ class UserTest {
         rich.setUsername("d");
         assertEquals("d", rich.getUsername());
         
-=======
         u.setUsername("a");
         assertEquals("a", u.getUsername());
 
@@ -48,12 +47,9 @@ class UserTest {
         rich.setUsername("d");
         assertEquals("d", rich.getUsername());
 
->>>>>>> Iteration2
         m.setUsername("m");
         assertEquals("m", m.getUsername());
     }
-
-<<<<<<< HEAD
     @Test
     void setPassword() {
     	u.setPassword("123");
@@ -74,16 +70,12 @@ class UserTest {
     
     @Test
     void getPassword() {
-    	assertEquals("password", u.getPassword());
+        assertEquals("password", u.getPassword());
         assertEquals("asdf123456", alex.getPassword());
         assertEquals("abcdefg", tom.getPassword());
         assertEquals("imrich", rich.getPassword());
         assertEquals("moderator", m.getPassword());
-
-=======
-
-
-
+    }
     @Test
     void getBalance() {
         assertEquals(2.02,u.getBalance());
@@ -118,64 +110,8 @@ class UserTest {
         assertEquals("Member" , tom.getAccessLevel());
         assertEquals("Admin" , rich.getAccessLevel());
         assertEquals("Moderator" , m.getAccessLevel());
->>>>>>> Iteration2
     }
-    
-    @Test
-    void getBalance() {
-    	assertEquals(2.02,u.getBalance());
-    	assertEquals( 123.56, alex.getBalance());
-    	assertEquals( 987.65, tom.getBalance());
-    	assertEquals( 123456.78, rich.getBalance());
-    	assertEquals( 0.01, m.getBalance());
-    }
-    
-    @Test
-    void setBalance() {
-    	u.setBalance(2.02);
-    	assertEquals(2.02,u.getBalance());
-    	
-    	alex.setBalance(123.56);
-    	assertEquals( 123.56, alex.getBalance());
-    	
-    	tom.setBalance(987.65);
-    	assertEquals( 987.65, tom.getBalance());
-    	
-    	rich.setBalance(123456.78);
-    	assertEquals( 123456.78, rich.getBalance());
-    	
-    	m.setBalance(0.01);
-    	assertEquals( 0.01, m.getBalance());
-    }
-    
-    @Test 
-    void getAccessLevel() {
-    	assertEquals("Member",u.getAccessLevel());
-    	assertEquals("Member" , alex.getAccessLevel());
-    	assertEquals("Member" , tom.getAccessLevel());
-    	assertEquals("Admin" , rich.getAccessLevel());
-    	assertEquals("Moderator" , m.getAccessLevel());
-    }
-    
-    @Test
-    void setAccessLevel() {
-    	u.setAccessLevel(0);
-    	assertEquals("Member",u.getAccessLevel());
-    	
-    	alex.setAccessLevel(1);
-    	assertEquals("Moderator" , alex.getAccessLevel());
-    	
-    	tom.setAccessLevel(2);
-    	assertEquals("Admin" , tom.getAccessLevel());
-    	
-    	rich.setAccessLevel(0);
-    	assertEquals("Member" , rich.getAccessLevel());
-    	
-    	m.setAccessLevel(1);
-    	assertEquals("Moderator" , m.getAccessLevel());
 
-<<<<<<< HEAD
-=======
     @Test
     void setAccessLevel() {
         u.setAccessLevel(0);
@@ -192,8 +128,6 @@ class UserTest {
 
         m.setAccessLevel(1);
         assertEquals("Moderator" , m.getAccessLevel());
-
->>>>>>> Iteration2
     }
 
 
