@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SqlServerConnectionTest {
     SqlServerConnection conn = new SqlServerConnection();
-    App currentApp = new App(0, null, null, 0, 0, 0);
 
     @Test
     void getAppsTable() throws SQLException {
@@ -89,7 +88,7 @@ class SqlServerConnectionTest {
     }
 
     @Test
-    void getApps()throws SQLException {
+    void getApps() {
         App dota = new App(2, "Dota2", "A famous 5V5 Moba Game.", 0, 5000000, 10);
         conn.setCurrentApp(dota);
         assertEquals(dota, conn.getCurrentApp());
@@ -100,7 +99,6 @@ class SqlServerConnectionTest {
     }
     @Test
     void getUserApps() throws SQLException {
-        User u = new User("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.registerUser("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.loginUser("userTest", new char[] {'t', 't', 't', 't', 't'} );
         App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);

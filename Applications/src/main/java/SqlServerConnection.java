@@ -52,7 +52,7 @@ public class SqlServerConnection implements ConnectionProvider {
     public JTable getAppsTable(int order, int isAsc) throws SQLException {
         conn = getConnection();
         // a rectangle of arraylists
-        ArrayList<App> appsList = new ArrayList<App>();
+        ArrayList<App> appsList = new ArrayList<>();
         String call = "{call getApps(?, ?)}";
         try (CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
@@ -95,7 +95,7 @@ public class SqlServerConnection implements ConnectionProvider {
         conn = getConnection();
 
         // a rectangle of arraylists
-        ArrayList<App> appsList = new ArrayList<App>();
+        ArrayList<App> appsList = new ArrayList<>();
         String call = "{call searchApps(?)}";
         try (CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
@@ -129,9 +129,9 @@ public class SqlServerConnection implements ConnectionProvider {
     /**
      * Registers a user into the system if it exists
      *
-     * @param username
-     * @return
-     * @throws SQLException
+     * @param username username of new user
+     * @return true or false on whether the user already exists
+     * @throws SQLException throw it in the trash
      */
     public boolean registerUser(String username, char[] pass) throws SQLException {
         conn = getConnection();
@@ -269,7 +269,7 @@ public class SqlServerConnection implements ConnectionProvider {
 
     /**
      * This method attempts to buy an app.
-     * @param boughtApp
+     * @param boughtApp the app the user buys
      */
     public boolean buyApp(App boughtApp) {
 
@@ -278,11 +278,11 @@ public class SqlServerConnection implements ConnectionProvider {
 
     /**
      * This method gets the current user's apps
-     * @return
+     * @return arraylist of apps the logged in user has
      */
     public ArrayList<App> getUserApps() {
 
-        return new ArrayList<App>();
+        return new ArrayList<>();
     }
     public User getCurrentUser() {
         return currentUser;

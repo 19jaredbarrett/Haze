@@ -1,6 +1,5 @@
 package DbClasses;
 
-import DbClasses.App;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -12,7 +11,7 @@ public class ApplicationsTableModel extends AbstractTableModel {
     private final ArrayList<App> appsTable;
     // keeps track if we are ascending right now or descending
     private boolean isAsc;
-    private int sortedApp;
+    private final int sortedApp;
     public static final int ORDER_BY_NAME = 0;
     public static final int ORDER_BY_PRICE = 1;
     public static final int ORDER_BY_DOWNLOADS = 2;
@@ -28,7 +27,7 @@ public class ApplicationsTableModel extends AbstractTableModel {
      * Method that updates the current ascending or descending value
      * current app is 1-4, name: 0, price: 1, downloads: 2, rating 3
      * the user just clicked a table header
-     * @return
+     * @return opposite of ascending or descending, acts as a switch
      */
     public int getIsAsc() {
 
