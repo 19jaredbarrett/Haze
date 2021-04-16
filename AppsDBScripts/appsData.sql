@@ -104,5 +104,5 @@ VALUES 		('Counter-Strike: Global Offensive',
 
 
 -- this is our default user!
-exec registerUser 'DogeLord', 'password', 6969696.00, 2
+exec registerUser 'DogeLord', 'password', 1000.00, 2
 -- exec loginUser 'DogeLord', 'This1sMyRealPa$$word'

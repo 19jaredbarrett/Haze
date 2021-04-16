@@ -21,7 +21,9 @@ public class SqlServerConnection implements ConnectionProvider {
     private static final HikariConfig conf = new HikariConfig();
     private static HikariDataSource ds;
     private static Connection conn;
+    private JTable appsTable;
     private User currentUser;
+    private ApplicationsTableModel model;
     private App currentApp;
 
     //HazePa$$word123
@@ -49,7 +51,6 @@ public class SqlServerConnection implements ConnectionProvider {
      */
     public JTable getAppsTable(int order, int isAsc) throws SQLException {
         conn = getConnection();
-
         // a rectangle of arraylists
         ArrayList<App> appsList = new ArrayList<App>();
         String call = "{call getApps(?, ?)}";
@@ -76,81 +77,54 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        ApplicationsTableModel model = new ApplicationsTableModel(appsList, order, isAsc == 1);
+        model = new ApplicationsTableModel(appsList, order, isAsc == 1);
         // create the tabel and return it
-        JTable appsTable = new JTable(model);
-        // set table column dimensions and format numbers to be in the center of the column
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        appsTable.setDefaultRenderer(Integer.class, centerRenderer);
-        appsTable.setDefaultRenderer(Double.class, centerRenderer);
-        appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
-        appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
-        appsTable.getColumnModel().getColumn(3).setPreferredWidth(40);
-        // set font and size for better table readability
-        appsTable.setRowHeight(24);
-        appsTable.setFont(new Font("Helvetica", Font.PLAIN, 12));
-
-        // add mouse listener to the header of this table to completely get a new table
-        appsTable.getTableHeader().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int col = appsTable.columnAtPoint(e.getPoint());
-                // set appsTable to the new table model
-                HazeApp.panel.remove(HazeApp.scrollPane);
-                try {
-                    JTable appsTable = getAppsTable(col, model.getIsAsc());
-                    HazeApp.scrollPane = new JScrollPane(appsTable);
-                    HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
-                    HazeApp.panel.add(HazeApp.scrollPane);
-                    HazeApp.panel.repaint();
-                    HazeApp.panel.invalidate();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
-
-        });
-        // add mouse listener for when the user clicks a cell
-        appsTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                int row = appsTable.rowAtPoint(evt.getPoint());
-                int col = appsTable.columnAtPoint(evt.getPoint());
-                if (row >= 0 && col >= 0) {
-                    // handle cell click
-                    // get cell 1: the app name
-                    // String appName = appsTable.get
-                    String textAreaString = "App Id: ";
-                    App clickedApp = model.getApp(row);
-                    textAreaString += clickedApp.getId() + "\n\nName: ";
-                    textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
-                    textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
-                    textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
-                    // format number of downloads with commas
-                    DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
-                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (1-10): ";
-                    int rating = clickedApp.getRating();
-                    textAreaString += rating;
-                    // Special ratings, display whether it is good or bad!
-                    if(rating == 10)
-                        HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games ＜(。_。)＞", true);
-                    else if (rating == 0)
-                        HazeApp.displaySuccess("Gambling for kids! Beware parents credit card", false);
-                    else if (rating == -1)
-                        HazeApp.displaySuccess("Battle Royales are trash (ಠ_ಠ)", false);
-                    else if (rating == 1)
-                        HazeApp.displaySuccess("Huge Disappointment for Doge \uD83D\uDE14", false);
-                    else  HazeApp.displaySuccess("", false);
-                    HazeApp.appDesc.setText(textAreaString);
-                    HazeApp.appDesc.repaint();
-                }
-            }
-        });
-        // create scroll pane and set the bounds
-
+        appsTable = new JTable(model);
+        addTableFeatures();
         return appsTable;
-    } // end getScrollPane method
+    } // end getApps method
+
+    /**
+     * OVERLOADING METHOD
+     * This gets an apps table based on a searchString
+     * @param searchString the string we want to search
+     * @return  apps table with apps that contain the substring: searchString
+     * @throws SQLException statement fails
+     */
+    public JTable getAppsTable(String searchString) throws SQLException {
+        conn = getConnection();
+
+        // a rectangle of arraylists
+        ArrayList<App> appsList = new ArrayList<App>();
+        String call = "{call searchApps(?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setString(1, searchString);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    String name = rs.getString(2);
+                    String desc = rs.getString(3);
+                    double price = rs.getDouble(4);
+                    int numDownloads = rs.getInt(5);
+                    int rating = rs.getInt(6);
+                    currentApp = new App(id, name, desc, price, numDownloads, rating);
+                    appsList.add(currentApp);
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        model = new ApplicationsTableModel(appsList, ApplicationsTableModel.ORDER_BY_NAME, true);
+        // create the tabel and return it
+        appsTable = new JTable(model);
+        addTableFeatures();
+        return appsTable;
+    } // end getApps method
 
     /**
      * Registers a user into the system if it exists
@@ -212,9 +186,104 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        currentUser = returnUser;
         return returnUser;
     }
 
+    /**
+     * This method adds the action listeners and sets the width/height of the table
+     * Called by functions getAppsTable(int order, int isAsc) and
+     * getAppsTable(String searchString)
+     */
+    private void addTableFeatures() {
+        // set table column dimensions and format numbers to be in the center of the column
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        appsTable.setDefaultRenderer(Integer.class, centerRenderer);
+        appsTable.setDefaultRenderer(Double.class, centerRenderer);
+        appsTable.getColumnModel().getColumn(0).setPreferredWidth(130);
+        appsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
+        appsTable.getColumnModel().getColumn(3).setPreferredWidth(40);
+        // set font and size for better table readability
+        appsTable.setRowHeight(24);
+        appsTable.setFont(new Font("Helvetica", Font.PLAIN, 12));
+
+        // add mouse listener to the header of this table to completely get a new table
+        appsTable.getTableHeader().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int col = appsTable.columnAtPoint(e.getPoint());
+                // set appsTable to the new table model
+                HazeApp.panel.remove(HazeApp.scrollPane);
+                try {
+                    JTable appsTable = getAppsTable(col, model.getIsAsc());
+                    HazeApp.scrollPane = new JScrollPane(appsTable);
+                    HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
+                    HazeApp.panel.add(HazeApp.scrollPane);
+                    HazeApp.panel.repaint();
+                    HazeApp.panel.invalidate();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+
+        });
+        // add mouse listener for when the user clicks a cell
+        appsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int row = appsTable.rowAtPoint(evt.getPoint());
+                int col = appsTable.columnAtPoint(evt.getPoint());
+                if (row >= 0 && col >= 0) {
+                    // handle cell click
+                    // get cell 1: the app name
+                    // String appName = appsTable.get
+                    String textAreaString = "App Id: ";
+                    App clickedApp = model.getApp(row);
+                    textAreaString += clickedApp.getId() + "\n\nName: ";
+                    textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
+                    textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
+                    textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
+                    // format number of downloads with commas
+                    DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
+                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (1-10): ";
+                    int rating = clickedApp.getRating();
+                    textAreaString += rating;
+                    // Special ratings, display whether it is good or bad!
+                    if(rating == 10)
+                        HazeApp.displaySuccess("GOD-LIKE, Doge's top 3 games ＜(。_。)＞", true);
+                    else if (rating == 0)
+                        HazeApp.displaySuccess("Gambling for kids! Beware...", false);
+                    else if (rating == -1)
+                        HazeApp.displaySuccess("Battle Royales are trash (ಠ_ಠ)", false);
+                    else if (rating == 1)
+                        HazeApp.displaySuccess("Huge Disappointment for Doge \uD83D\uDE14", false);
+                    else  HazeApp.displaySuccess("", false);
+                    HazeApp.appDesc.setText(textAreaString);
+                    HazeApp.appDesc.repaint();
+                }
+            }
+        });
+        // create scroll pane and set the bounds
+    }
+
+    /**
+     * This method attempts to buy an app.
+     * @param boughtApp
+     */
+    public boolean buyApp(App boughtApp) {
+
+        return false;
+    }
+
+    /**
+     * This method gets the current user's apps
+     * @return
+     */
+    public ArrayList<App> getUserApps() {
+
+        return new ArrayList<App>();
+    }
     public User getCurrentUser() {
         return currentUser;
     }
@@ -231,4 +300,7 @@ public class SqlServerConnection implements ConnectionProvider {
     	this.currentApp = currentApp;
     }
 
+    public void setCurrentApp(App appChange) {
+        currentApp = appChange;
+    }
 }

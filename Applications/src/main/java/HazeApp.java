@@ -38,6 +38,7 @@ public class HazeApp {
      */
     public static void displayHomePage(boolean loggedIn) throws SQLException {
         panel.setLayout(null);
+        panel.setBackground(Color.lightGray);
         clearPanel();
         if(loggedIn)
             updateUserInterfaceLoggedIn();
@@ -63,6 +64,8 @@ public class HazeApp {
         appDesc.setLineWrap(true);
         appDesc.setWrapStyleWord(true);
         panel.add(appDesc);
+        // add search functionality!
+        addSearchButton();
     }
 
 
@@ -236,16 +239,20 @@ public class HazeApp {
             // if the string is empty, we just want to clear the success label of our panel
             if(displayString.isEmpty()) {
                 displayCreatedSuccess = null;
+                panel.repaint();
                 return;
             }
-        }
-
+        } else if(displayString.isEmpty())
+            return;
         displayCreatedSuccess = new JLabel(displayString);
         displayCreatedSuccess.setBounds(230, 50, 300, 25);
         if(isSuccess)
             displayCreatedSuccess.setForeground(Color.BLUE);
         else
             displayCreatedSuccess.setForeground(Color.RED);
+        displayCreatedSuccess.setFont(new Font("Helvetica", Font.BOLD, 13));
+        displayCreatedSuccess.setBackground(new Color(1f,1f,1f,0.5f));
+        displayCreatedSuccess.setOpaque(true);
         panel.add(displayCreatedSuccess);
         panel.repaint();
     }
@@ -280,6 +287,7 @@ public class HazeApp {
             JButton openAdminInterface = new JButton("Open Admin Panel");
             openAdminInterface.setBounds(415, 390, 180, 25);
             panel.add(openAdminInterface);
+            panel.setBackground(Color.pink);
         }
 
         JButton signOutButton = new JButton("Sign Out");
@@ -299,6 +307,41 @@ public class HazeApp {
         panel.add(signOutButton);
         frame.invalidate();
         frame.repaint();
+    }
+
+    /**
+     * Adds search button to our program!
+     */
+    private static void addSearchButton() {
+        JTextField searchText = new JTextField(20);
+        searchText.setBounds(100, 540, 165, 25);
+        JButton searchBtn = new JButton("Search");
+        searchBtn.setBounds(10, 540,85,25);
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                String searchString = searchText.getText();
+                if(searchString.isEmpty())
+                    displaySuccess("Provide a search string please!", false);
+                else if(searchString.length() > 100)
+                    displaySuccess("LESS THAN 100 CHARS", false);
+                else {
+                    displaySuccess("Searching...¯\\_(ツ)_/¯ \uD83E\uDD14", true);
+                    panel.remove(scrollPane);
+                    try {
+                        scrollPane = new JScrollPane(conn.getAppsTable(searchString));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    scrollPane.setBounds(10, 80, 350, 450 );
+                    panel.add(scrollPane);
+                    panel.repaint();
+                }
+
+            }
+        });
+        panel.add(searchBtn);
+        panel.add(searchText);
     }
 
 

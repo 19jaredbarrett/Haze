@@ -16,7 +16,7 @@ public class SignInActionHandler  implements ActionListener {
         String username = HazeApp.userText.getText();
         char[] password = HazeApp.pwText.getPassword();
         if(username.length() == 0 || password.length == 0) {
-            HazeApp.displaySuccess("Must provide username and password (●__●)", false);
+            HazeApp.displaySuccess("Provide username and password (●__●)", false);
             return;
         }
         User u = null;
