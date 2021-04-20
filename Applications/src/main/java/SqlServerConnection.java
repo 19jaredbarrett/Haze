@@ -246,7 +246,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
                     // format number of downloads with commas
                     DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
-                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (1-10): ";
+                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (-1-10): ";
                     int rating = clickedApp.getRating();
                     textAreaString += rating;
                     // Special ratings, display whether it is good or bad!
