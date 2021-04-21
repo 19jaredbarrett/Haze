@@ -155,3 +155,108 @@ FROM Apps a
 WHERE (Users.userId = @userId)
 
 END
+
+/*
+------------------------getUserApps
+	@order 1-3
+	1: we sort by name
+	2: we sort by price
+	3: we sort by numDownloads
+	@isAsc : 
+	0: ascending orderge
+	1: descending order
+*/
+
+CREATE PROCEDURE getUserApps 
+	@order	INT,
+	@isAsc	BIT
+	AS
+	BEGIN
+		IF	(@order = 1) AND 
+			(@isAsc = 0)
+		BEGIN
+		-- order by name, descending
+			SELECT	ua.userId,
+					ua.appId,
+					a.appName,
+					a.description,
+					a.price,
+					a.numDownloads,
+					ua.Comments
+			FROM userApps	ua
+			LEFT JOIN Apps a ON (ua.appId = a.appId)
+			ORDER BY a.appName DESC, a.numDownloads DESC
+		END ELSE IF (@order = 1) AND
+					(@isAsc = 1)
+		BEGIN
+		-- order by name, ascending
+			SELECT	ua.userId,
+					ua.appId,
+					a.appName,
+					a.description,
+					a.price,
+					a.numDownloads,
+					ua.Comments
+			FROM userApps	ua
+			LEFT JOIN Apps a ON (ua.appId = a.appId)
+			ORDER BY a.appName ASC, a.numDownloads DESC
+
+		END ELSE IF (@order = 2) AND
+					(@isAsc = 0) 
+		BEGIN
+		-- order by price, descending
+			SELECT	ua.userId,
+					ua.appId,
+					a.appName,
+					a.description,
+					a.price,
+					a.numDownloads,
+					ua.Comments
+			FROM userApps	ua
+			LEFT JOIN Apps a ON (ua.appId = a.appId)
+			ORDER BY a.price	DESC, a.appName DESC
+		END ELSE IF (@order = 2) AND
+					(@isAsc = 1) 
+		BEGIN
+		-- order by price, Ascending
+			SELECT	ua.userId,
+					ua.appId,
+					a.appName,
+					a.description,
+					a.price,
+					a.numDownloads,
+					ua.Comments
+			FROM userApps	ua
+			LEFT JOIN Apps a ON (ua.appId = a.appId)
+			ORDER BY a.price	ASC, a.appName DESC
+		END ELSE IF (@order = 3) AND
+					(@isAsc = 0) 
+		BEGIN
+		-- order by numDownloads, Descending
+			SELECT	ua.userId,
+					ua.appId,
+					a.appName,
+					a.description,
+					a.price,
+					a.numDownloads,
+					ua.Comments
+			FROM userApps	ua
+			LEFT JOIN Apps a ON (ua.appId = a.appId)
+			ORDER BY a.numDownloads DESC, a.appName DESC
+		END ELSE IF (@order = 3) AND
+					(@isAsc = 1) 
+		BEGIN
+		-- order by numDownloads, Descending
+			SELECT	ua.userId,
+					ua.appId,
+					a.appName,
+					a.description,
+					a.price,
+					a.numDownloads,
+					ua.Comments
+			FROM userApps	ua
+			LEFT JOIN Apps a ON (ua.appId = a.appId)
+			ORDER BY a.numDownloads ASC, a.appName DESC
+		END
+	END
+
