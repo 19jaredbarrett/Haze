@@ -128,4 +128,26 @@ AS BEGIN
 	ORDER BY Apps.appName
 END
 
-exec searchApps 'mount'
+--exec searchApps 'mount'
+/*
+BuyApps transfers application information to user's application library when a user chooses to purchase an application.
+@appId is the appId of the chosen application
+@userId is the id of the user at the time of executing the purchase
+*/
+DROP PROCEDURE IF EXISTS BuyApps
+GO
+
+CREATE PROCEDURE BuyApps
+@appId		INT,
+@userId		INT
+AS
+BEGIN
+INSERT INTO userApps(userId,appId, appName, Comments)
+	SELECT	@userId,
+			@appId,
+			a.appName,
+			a.Comments
+	FROM	Apps a
+	WHERE	(@appId = a.appId)
+
+END
