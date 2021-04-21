@@ -133,21 +133,25 @@ END
 BuyApps transfers application information to user's application library when a user chooses to purchase an application.
 @appId is the appId of the chosen application
 @userId is the id of the user at the time of executing the purchase
+@Comments are messages left on each application by users that have purchased them
 */
-DROP PROCEDURE IF EXISTS BuyApps
+DROP PROCEDURE IF EXISTS buyApps
 GO
 
-CREATE PROCEDURE BuyApps
+CREATE PROCEDURE buyApps
 @appId		INT,
-@userId		INT
+@userId		INT,
+@Comments	VARCHAR(MAX)
 AS
 BEGIN
-INSERT INTO userApps(userId,appId, appName, Comments)
-	SELECT	@userId,
-			@appId,
-			a.appName,
-			a.Comments
-	FROM	Apps a
-	WHERE	(@appId = a.appId)
+INSERT INTO userApps(userId, appId, Comments)
+	VALUES (@userId, @appId, @Comments)
+
+UPDATE Users  
+SET balance = balance - (
+SELECT a.price
+FROM Apps a
+)
+WHERE (Users.userId = @userId)
 
 END
