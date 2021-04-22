@@ -128,7 +128,7 @@ AS BEGIN
 	ORDER BY Apps.appName
 END
 
-exec searchApps 'mount'
+--exec searchApps 'mount'
 
 
 DROP PROCEDURE IF EXISTS buyApp
@@ -140,12 +140,12 @@ GO
 	returns -1 if the user already has the app
 */
 CREATE PROCEDURE buyApp
-	@appId		INT,
 	@userId		INT,
+	@appId		INT,
 	@comment	VARCHAR(MAX)
 AS
 BEGIN
-	SET NOCOUNT OFF
+	SET NOCOUNT ON
 	IF EXISTS (SELECT appId FROM userApps WHERE (appId = @appId) AND (userId = @userId))
 		SELECT -1
 	ELSE BEGIN
@@ -164,3 +164,19 @@ END
 GO
 
 -- EXEC buyApp 1, 2, 'this game is amazing!'
+/*
+	This procedure gets each of the user's bought apps
+*/
+CREATE PROCEDURE getUserApps
+		@userId		INT
+AS 
+BEGIN
+	sET NOCOUNT ON
+	SELECT	userApps.appId,
+			Apps.appName,
+			userApps.comment	
+	FROM userApps
+		JOIN Apps ON userApps.appId = Apps.appId
+	WHERE userApps.userId = @userId
+END
+-- EXEC getUserApps 1

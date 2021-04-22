@@ -274,9 +274,17 @@ public class HazeApp {
         loggedIn.setForeground(Color.GREEN);
         panel.add(loggedIn);
 
+        // add buyApp functionality
         JButton buyCurrentApp = new JButton("Buy App");
         buyCurrentApp.setBounds(370, 340, 80 , 25);
         panel.add(buyCurrentApp);
+        JLabel commentLbl = new JLabel("Comment:");
+        commentLbl.setBounds(370, 370, 75, 25);
+        panel.add(commentLbl);
+        JTextField buyCommentTxt = new JTextField();
+        buyCommentTxt.setBounds(440,370, 200, 25);
+        panel.add(buyCommentTxt);
+
 
         JLabel balanceLabel = new JLabel("User Balance: " + currUser.getBalance());
         balanceLabel.setBounds(460, 340, 160, 25);
@@ -285,7 +293,7 @@ public class HazeApp {
         if(currUser.getAccessLevelInt() == 2 ) {
             //This1sMyRealPa$$word admin example
             JButton openAdminInterface = new JButton("Open Admin Panel");
-            openAdminInterface.setBounds(415, 390, 180, 25);
+            openAdminInterface.setBounds(415, 400, 180, 25);
             panel.add(openAdminInterface);
             panel.setBackground(Color.pink);
         }
@@ -303,8 +311,11 @@ public class HazeApp {
                 }
             }
         });
-
         panel.add(signOutButton);
+        // Add userApps Label, below will show the user's apps
+        JLabel userAppsLbl = new JLabel(currUser.getUsername() + "'s Apps", SwingConstants.CENTER);
+        userAppsLbl.setBounds(415,420,180, 25);
+        panel.add(userAppsLbl);
         frame.invalidate();
         frame.repaint();
     }

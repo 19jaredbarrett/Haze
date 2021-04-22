@@ -272,7 +272,11 @@ public class SqlServerConnection implements ConnectionProvider {
      * @param boughtApp the app the user buys
      */
     public boolean buyApp(App boughtApp) {
+        if (currentApp == null)
+            return false;
+        else {
 
+        }
         return false;
     }
 
