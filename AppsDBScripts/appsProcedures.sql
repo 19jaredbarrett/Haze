@@ -129,3 +129,38 @@ AS BEGIN
 END
 
 exec searchApps 'mount'
+
+
+DROP PROCEDURE IF EXISTS buyApp
+GO
+
+/*
+	buyApp - buys an app if the user doesn't already have this app.
+	updates Users to decrease balance accordingly and adds the app to userApps
+	returns -1 if the user already has the app
+*/
+CREATE PROCEDURE buyApp
+	@appId		INT,
+	@userId		INT,
+	@comment	VARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT OFF
+	IF EXISTS (SELECT appId FROM userApps WHERE (appId = @appId) AND (userId = @userId))
+		SELECT -1
+	ELSE BEGIN
+		INSERT INTO userApps(userId, appId, comment)
+			VALUES (@userId, @appId, @comment)
+
+		UPDATE Users  
+		SET balance = balance - (
+			SELECT a.price
+			FROM Apps a
+			WHERE a.appId = @appId
+		)
+		WHERE (Users.userId = @userId)
+	END
+END
+GO
+
+-- EXEC buyApp 1, 2, 'this game is amazing!'
