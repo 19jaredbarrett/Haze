@@ -29,7 +29,11 @@ public class SignInActionHandler  implements ActionListener {
             HazeApp.displaySuccess("Incorrect Username or Password (╯°□°）╯", false);
         } else {
             HazeApp.conn.setCurrentUser(u);
-            HazeApp.updateUserInterfaceLoggedIn();
+            try {
+                HazeApp.updateUserInterfaceLoggedIn();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             HazeApp.displaySuccess("Success (☞ ͡° ͜ʖ ͡°)☞ (☞ ͡° ͜ʖ ͡°)☞ (☞ ͡° ͜ʖ ͡°)☞", true);
         }
 

@@ -1,11 +1,23 @@
 package DbClasses;
 
 public class User {
+    private int userId;
     private String username;
     private String password;
     private double balance;
     // 0-2, 2 is admin
     private int accessLevel;
+    /**
+     * Creates a user object using account credentials.
+     * @param username The username of the user account.
+     * @param password The password for a target user account.
+     */
+    public User(String username, String password, double balance, int accesslevel) {
+        this.username = username;
+        this.password = password;
+        this.balance = balance;
+        this.accessLevel = accesslevel;
+    }
 
     public User(String username, String password) {
         this.username = username;
@@ -58,17 +70,7 @@ public class User {
         this.accessLevel = accessLevel;
     }
 
-    /**
-     * Creates a user object using account credentials.
-     * @param username The username of the user account.
-     * @param password The password for a target user account.
-     */
-    public User(String username, String password, double balance, int accesslevel) {
-        this.username = username;
-        this.password = password;
-        this.balance = balance;
-        this.accessLevel = accesslevel;
-    }
+
 
     public String getUsername() {
         return username;
@@ -87,6 +89,11 @@ public class User {
         return password;
     }
 
+    public int getUserId() {
+        return userId;
+    }
 
-
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

@@ -6,7 +6,7 @@ public class UserApp {
     private String appName;
     private String comment;
 
-    public UserApp(int appId, String appName, String comment) {
+    public UserApp(int appId, String  appName, String comment) {
         this.appId = appId;
         this.appName = appName;
         this.comment = comment;

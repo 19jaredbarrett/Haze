@@ -1,7 +1,4 @@
-import DbClasses.App;
-import DbClasses.ApplicationsTableModel;
-import DbClasses.ConnectionProvider;
-import DbClasses.User;
+import DbClasses.*;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -81,6 +78,8 @@ public class SqlServerConnection implements ConnectionProvider {
         // create the tabel and return it
         appsTable = new JTable(model);
         addTableFeatures();
+        // set current app to null so we can buy apps correctly
+        currentApp = null;
         return appsTable;
     } // end getApps method
 
@@ -93,7 +92,6 @@ public class SqlServerConnection implements ConnectionProvider {
      */
     public JTable getAppsTable(String searchString) throws SQLException {
         conn = getConnection();
-
         // a rectangle of arraylists
         ArrayList<App> appsList = new ArrayList<>();
         String call = "{call searchApps(?)}";
@@ -123,6 +121,8 @@ public class SqlServerConnection implements ConnectionProvider {
         // create the tabel and return it
         appsTable = new JTable(model);
         addTableFeatures();
+        // set current app to null so we can buy apps correctly
+        currentApp = null;
         return appsTable;
     } // end getApps method
 
@@ -161,12 +161,12 @@ public class SqlServerConnection implements ConnectionProvider {
     }
 
     public User loginUser(String username, char[] pass) throws SQLException {
+        conn = getConnection();
         // return null if blank objects
         if (username.isEmpty() || pass.length == 0)
             return null;
-        conn = getConnection();
         User u = new User(username, pass);
-        User returnUser = null;
+        currentUser = null;
         String call = "{call loginUser(?, ?)}";
         try (CallableStatement stmt = conn.prepareCall(call)) {
             stmt.setString(1, u.getUsername());
@@ -175,19 +175,21 @@ public class SqlServerConnection implements ConnectionProvider {
             if (hasResult) {
                 ResultSet rs = stmt.getResultSet();
                 if (rs.next()) {
-                    returnUser = new User(rs.getString(2),
+                    currentUser = new User(
+                            rs.getString(2),
                             "blank_passsword",
                             rs.getDouble(4),
                             rs.getInt(5));
+                    currentUser.setUserId(rs.getInt(1));
                 }
+
             }
             stmt.close();
             conn.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        currentUser = returnUser;
-        return returnUser;
+        return currentUser;
     }
 
     /**
@@ -239,15 +241,15 @@ public class SqlServerConnection implements ConnectionProvider {
                     // get cell 1: the app name
                     // String appName = appsTable.get
                     String textAreaString = "App Id: ";
-                    App clickedApp = model.getApp(row);
-                    textAreaString += clickedApp.getId() + "\n\nName: ";
-                    textAreaString += clickedApp.getAppName() + "\n\nDescription: ";
-                    textAreaString += clickedApp.getDescription() + "\n\nPrice: ";
-                    textAreaString += clickedApp.getPrice() + "\n\nNumDownloads: ";
+                    currentApp = model.getApp(row);
+                    textAreaString += currentApp.getId() + "\n\nName: ";
+                    textAreaString += currentApp.getAppName() + "\n\nDescription: ";
+                    textAreaString += currentApp.getDescription() + "\n\nPrice: ";
+                    textAreaString += currentApp.getPrice() + "\n\nNumDownloads: ";
                     // format number of downloads with commas
                     DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
-                    textAreaString += formatCommas.format(clickedApp.getNumDownloads()) + "\n\nDoge's review (-1-10): ";
-                    int rating = clickedApp.getRating();
+                    textAreaString += formatCommas.format(currentApp.getNumDownloads()) + "\n\nDoge's review (-1-10): ";
+                    int rating = currentApp.getRating();
                     textAreaString += rating;
                     // Special ratings, display whether it is good or bad!
                     if(rating == 10)
@@ -269,16 +271,72 @@ public class SqlServerConnection implements ConnectionProvider {
 
     /**
      * This method attempts to buy an app.
-     * @param boughtApp the app the user buys
+     * @param comment the comment inputted for this given app
+     * @return true or false, depending on whether the user has the app already
      */
-    public boolean buyApp(App boughtApp) {
-        if (currentApp == null)
-            return false;
-        else {
+    public boolean buyApp(String comment) throws SQLException {
+        conn = getConnection();
+        String call = "{call buyApp(?, ?, ?)}";
 
+        boolean hasAlready = false;
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            stmt.setInt(1, currentUser.getUserId());
+            stmt.setInt(2, currentApp.getId());
+            stmt.setString(3, comment);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                if(rs.next()) {
+                    hasAlready = true;
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        return false;
+        if(!hasAlready)
+            currentUser.setBalance(currentUser.getBalance()-currentApp.getPrice());
+        return hasAlready;
     }
+
+    /**
+     *
+     * @return table of the current user's apps!
+     * @throws SQLException
+     */
+    public JTable getUserAppsTable() throws SQLException {
+        conn = getConnection();
+        // a rectangle of arraylists
+        ArrayList<UserApp> userAppsList = new ArrayList<>();
+        String call = "{call getUserApps(?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setInt(1, currentUser.getUserId());
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    UserApp currUserApp = new UserApp (
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3)
+                    );
+                    userAppsList.add(currUserApp);
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        UserAppTableModel userAppsModel  = new UserAppTableModel(userAppsList);
+        // create the table and return it
+        JTable userAppsTable = new JTable(userAppsModel);
+        userAppsTable.getColumnModel().getColumn(0).setPreferredWidth(115);
+        userAppsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+        return userAppsTable;
+    } // end getApps method
 
     /**
      * This method gets the current user's apps

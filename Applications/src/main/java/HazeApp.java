@@ -22,7 +22,6 @@ public class HazeApp {
     private static JLabel displayCreatedSuccess;
 
     public static void main(String[] args) throws SQLException {
-
         panel = new JPanel();
         frame = new JFrame();
         frame.setSize(720,640);
@@ -261,7 +260,7 @@ public class HazeApp {
     /**
      * updates user interface
      */
-    public static void updateUserInterfaceLoggedIn() {
+    public static void updateUserInterfaceLoggedIn() throws SQLException {
         panel.remove(0);
         panel.remove(1);
         panel.remove(2);
@@ -273,30 +272,46 @@ public class HazeApp {
         loggedIn.setBounds(10, 20, 400, 25);
         loggedIn.setForeground(Color.GREEN);
         panel.add(loggedIn);
+        JLabel balanceLabel = new JLabel("User Balance: " + currUser.getBalance());
+        balanceLabel.setBounds(460, 340, 160, 25);
+        panel.add(balanceLabel);
 
         // add buyApp functionality
-        JButton buyCurrentApp = new JButton("Buy App");
-        buyCurrentApp.setBounds(370, 340, 80 , 25);
-        panel.add(buyCurrentApp);
         JLabel commentLbl = new JLabel("Comment:");
         commentLbl.setBounds(370, 370, 75, 25);
         panel.add(commentLbl);
         JTextField buyCommentTxt = new JTextField();
         buyCommentTxt.setBounds(440,370, 200, 25);
         panel.add(buyCommentTxt);
-
-
-        JLabel balanceLabel = new JLabel("User Balance: " + currUser.getBalance());
-        balanceLabel.setBounds(460, 340, 160, 25);
-        panel.add(balanceLabel);
-
-        if(currUser.getAccessLevelInt() == 2 ) {
-            //This1sMyRealPa$$word admin example
-            JButton openAdminInterface = new JButton("Open Admin Panel");
-            openAdminInterface.setBounds(415, 400, 180, 25);
-            panel.add(openAdminInterface);
-            panel.setBackground(Color.pink);
-        }
+        JButton buyCurrentApp = new JButton("Buy App");
+        buyCurrentApp.setBounds(370, 340, 80 , 25);
+        buyCurrentApp.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                String commentTxt = buyCommentTxt.getText();
+                if(commentTxt.isEmpty())
+                    displaySuccess("Must provide comment!",false);
+                else if (conn.getCurrentApp() == null) {
+                    displaySuccess("Must select an App!", false);
+                } else if (conn.getCurrentUser().getBalance() < conn.getCurrentApp().getPrice()) {
+                    displaySuccess("You don't have enough money :[", false);
+                } else {
+                    boolean hasAlready = true;
+                    try {
+                        hasAlready = conn.buyApp(commentTxt);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    balanceLabel.setText("User Balance: " + currUser.getBalance());
+                    if(!hasAlready)
+                        displaySuccess(conn.getCurrentApp().getAppName() + " purchased つ◕_◕つ" , true);
+                    else {
+                        displaySuccess("You have this app already!", false);
+                    }
+                }
+            }
+        });
+        panel.add(buyCurrentApp);
 
         JButton signOutButton = new JButton("Sign Out");
         signOutButton.setBounds(500, 20, 90, 25);
@@ -315,7 +330,18 @@ public class HazeApp {
         // Add userApps Label, below will show the user's apps
         JLabel userAppsLbl = new JLabel(currUser.getUsername() + "'s Apps", SwingConstants.CENTER);
         userAppsLbl.setBounds(415,420,180, 25);
+        // display this user's bought apps
         panel.add(userAppsLbl);
+        JScrollPane userAppsPane = new JScrollPane(conn.getUserAppsTable());
+        userAppsPane.setBounds(370, 450, 315, 145);
+        if(currUser.getAccessLevelInt() == 2 ) {
+            //This1sMyRealPa$$word admin example
+            JButton openAdminInterface = new JButton("Open Admin Panel");
+            openAdminInterface.setBounds(415, 400, 180, 25);
+            panel.add(openAdminInterface);
+            panel.setBackground(Color.pink);
+        }
+        panel.add(userAppsPane);
         frame.invalidate();
         frame.repaint();
     }
