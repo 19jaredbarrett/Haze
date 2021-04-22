@@ -20,6 +20,7 @@ public class HazeApp {
     public static JTextArea appDesc;
     public static JScrollPane scrollPane;
     private static JLabel displayCreatedSuccess;
+    private static JScrollPane userAppsPane;
 
     public static void main(String[] args) throws SQLException {
         panel = new JPanel();
@@ -276,6 +277,10 @@ public class HazeApp {
         balanceLabel.setBounds(460, 340, 160, 25);
         panel.add(balanceLabel);
 
+        // add userApps table to the panel
+        userAppsPane = new JScrollPane(conn.getUserAppsTable());
+        userAppsPane.setBounds(370, 450, 315, 145);
+        panel.add(userAppsPane);
         // add buyApp functionality
         JLabel commentLbl = new JLabel("Comment:");
         commentLbl.setBounds(370, 370, 75, 25);
@@ -288,6 +293,7 @@ public class HazeApp {
         buyCurrentApp.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+
                 String commentTxt = buyCommentTxt.getText();
                 if(commentTxt.isEmpty())
                     displaySuccess("Must provide comment!",false);
@@ -299,6 +305,13 @@ public class HazeApp {
                     boolean hasAlready = true;
                     try {
                         hasAlready = conn.buyApp(commentTxt);
+                        if(!hasAlready) {
+                            panel.remove(userAppsPane);
+                            userAppsPane = new JScrollPane(conn.getUserAppsTable());
+                            userAppsPane.setBounds(370, 450, 315, 145);
+                            panel.add(userAppsPane);
+                        }
+
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -329,19 +342,31 @@ public class HazeApp {
         panel.add(signOutButton);
         // Add userApps Label, below will show the user's apps
         JLabel userAppsLbl = new JLabel(currUser.getUsername() + "'s Apps", SwingConstants.CENTER);
-        userAppsLbl.setBounds(415,420,180, 25);
+        userAppsLbl.setBounds(415,425,180, 25);
         // display this user's bought apps
         panel.add(userAppsLbl);
-        JScrollPane userAppsPane = new JScrollPane(conn.getUserAppsTable());
-        userAppsPane.setBounds(370, 450, 315, 145);
+        // admin panel implementation !!!!!
         if(currUser.getAccessLevelInt() == 2 ) {
             //This1sMyRealPa$$word admin example
             JButton openAdminInterface = new JButton("Open Admin Panel");
             openAdminInterface.setBounds(415, 400, 180, 25);
+            openAdminInterface.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    panel.remove(userAppsPane);
+                    panel.remove(userAppsLbl);
+                    JLabel thisisalligot = new JLabel("This is all I got so far to be honest... :)");
+                    thisisalligot.setFont(new Font("Helvetica", Font.BOLD, 13));
+                    thisisalligot.setBounds(370,440,230, 25);
+                    thisisalligot.setForeground(Color.CYAN);
+                    panel.add(thisisalligot);
+                    displaySuccess("Admin interface opened (⌐▨_▨)", true);
+                }
+            });
             panel.add(openAdminInterface);
             panel.setBackground(Color.pink);
         }
-        panel.add(userAppsPane);
+
         frame.invalidate();
         frame.repaint();
     }
