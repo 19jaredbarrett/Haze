@@ -72,20 +72,23 @@ class SqlServerConnectionTest {
     }
     @Test
     void buyApp() throws SQLException {
-        /*
+
         App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
+        conn.setCurrentApp(ex);
         conn.loginUser("DogeLord", new char[] {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'} );
-        assertTrue(conn.buyApp(ex));
+        assertTrue(conn.buyApp("this game's pretty cool :]"));
         assertEquals(990.0,conn.getCurrentUser().getBalance(), 0.001);
-        ex = new App(1, "Bannerlord", "You play as a doge!", 50.00, 50504, 0);
-        assertTrue(conn.buyApp(ex));
+        ex = new App(20, "Bannerlord", "You play as a doge!", 50.00, 50504, 0);
+        assertTrue(conn.buyApp("ok game"));
+        conn.setCurrentApp(ex);
         assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);
         assertFalse(conn.buyApp(null));
         assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);
         // price above balance
-        ex = new App(1, "expensive", "very", 5000.00, 4, 0);
-        assertFalse(conn.buyApp(ex));
-        assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);*/
+        ex = new App(30, "expensive", "very", 5000.00, 4, 0);
+        conn.setCurrentApp(ex);
+        assertFalse(conn.buyApp("ok game"));
+        assertEquals(940.0, conn.getCurrentUser().getBalance(), 0.001);
     }
 
     @Test
@@ -102,7 +105,6 @@ class SqlServerConnectionTest {
     void getUserApps() throws SQLException {
         conn.registerUser("userTest", new char[] {'t', 't', 't', 't', 't'});
         conn.loginUser("userTest", new char[] {'t', 't', 't', 't', 't'} );
-        App ex = new App(1, "DogeGame", "You play as a doge!", 10.00, 50504, 0);
         // app 1
         //assertTrue(conn.buyApp(ex));
         //conn.buyApp(new App(1, "Bannerlord", "You play as a doge!", 20.00, 50504, 0));
