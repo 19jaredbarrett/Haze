@@ -240,14 +240,17 @@ public class SqlServerConnection implements ConnectionProvider {
                     currentApp = model.getApp(row);
                     // add user apps pane if user is logged in
                     if(currentUser != null) {
+                        JScrollPane userAppsPane = null;
                         // add userApps table to the panel
                         try {
-                            HazeApp.userAppsPane = new JScrollPane(getUserAppsTable());
+                            userAppsPane = new JScrollPane(getUserAppsTable());
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                         }
-                        HazeApp.userAppsPane.setBounds(370, 450, 315, 145);
-                        HazeApp.initializeUserAppsPane();
+                        if(userAppsPane != null ) {
+                            userAppsPane.setBounds(370, 450, 315, 145);
+                            HazeApp.addUserAppsPane(userAppsPane);
+                        }
                     }
                     // handle cell click
                     // get cell 1: the app name

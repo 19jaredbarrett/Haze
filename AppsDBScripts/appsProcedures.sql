@@ -167,8 +167,8 @@ GO
 /*
 	This procedure gets each of the current game's comments
 */
-ALTER PROCEDURE getUserApps
-		@mapId		INT
+CREATE PROCEDURE getUserApps
+		@appId		INT
 AS 
 BEGIN
 	sET NOCOUNT ON
@@ -177,6 +177,21 @@ BEGIN
 			userApps.comment	
 	FROM userApps
 		JOIN Users u ON		userApps.userId = u.userId
-	WHERE userApps.userId = @mapId
+	WHERE userApps.appId = @appId
 END
--- EXEC getUserApps 1
+GO
+-- EXEC getUserApps 6
+/*
+	This
+*/
+CREATE PROCEDURE getAllUserApps
+AS
+BEGIN
+	SET NOCOUNT ON
+	SELECT	userApps.appId,
+			u.username,
+			userApps.comment	
+	FROM userApps
+		JOIN Users u ON		userApps.userId = u.userId
+
+END

@@ -400,13 +400,12 @@ public class HazeApp {
         panel.add(searchText);
     }
 
-    public static void initializeUserAppsPane() {
-        if(userAppsPane != null)
+    public static void addUserAppsPane(JScrollPane userAppsPaneParam) {
+            if(userAppsPane != null) {
+                panel.remove(userAppsPane);
+            }
+            userAppsPane = userAppsPaneParam;
             panel.add(userAppsPane);
-        else {
-            panel.remove(userAppsPane);
-            panel.add(userAppsPane);
-        }
     }
 
 }
