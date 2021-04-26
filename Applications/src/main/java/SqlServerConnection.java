@@ -237,11 +237,23 @@ public class SqlServerConnection implements ConnectionProvider {
                 int row = appsTable.rowAtPoint(evt.getPoint());
                 int col = appsTable.columnAtPoint(evt.getPoint());
                 if (row >= 0 && col >= 0) {
+                    currentApp = model.getApp(row);
+                    // add user apps pane if user is logged in
+                    if(currentUser != null) {
+                        // add userApps table to the panel
+                        try {
+                            HazeApp.userAppsPane = new JScrollPane(getUserAppsTable());
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                        HazeApp.userAppsPane.setBounds(370, 450, 315, 145);
+                        HazeApp.initializeUserAppsPane();
+                    }
                     // handle cell click
                     // get cell 1: the app name
                     // String appName = appsTable.get
                     String textAreaString = "App Id: ";
-                    currentApp = model.getApp(row);
+
                     textAreaString += currentApp.getId() + "\n\nName: ";
                     textAreaString += currentApp.getAppName() + "\n\nDescription: ";
                     textAreaString += currentApp.getDescription() + "\n\nPrice: ";
@@ -263,6 +275,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     else  HazeApp.displaySuccess("", false);
                     HazeApp.appDesc.setText(textAreaString);
                     HazeApp.appDesc.repaint();
+
                 }
             }
         });
@@ -312,7 +325,7 @@ public class SqlServerConnection implements ConnectionProvider {
         String call = "{call getUserApps(?)}";
         try (CallableStatement stmt = conn.prepareCall(call)) {
             // set order and isAsc to true
-            stmt.setInt(1, currentUser.getUserId());
+            stmt.setInt(1, currentApp.getId());
             boolean hasResult = stmt.execute();
             if (hasResult) {
                 ResultSet rs = stmt.getResultSet();

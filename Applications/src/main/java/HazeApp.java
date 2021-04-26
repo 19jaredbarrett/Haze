@@ -20,7 +20,7 @@ public class HazeApp {
     public static JTextArea appDesc;
     public static JScrollPane scrollPane;
     private static JLabel displayCreatedSuccess;
-    private static JScrollPane userAppsPane;
+    protected static JScrollPane userAppsPane;
 
     public static void main(String[] args) throws SQLException {
         panel = new JPanel();
@@ -277,10 +277,7 @@ public class HazeApp {
         balanceLabel.setBounds(460, 340, 160, 25);
         panel.add(balanceLabel);
 
-        // add userApps table to the panel
-        userAppsPane = new JScrollPane(conn.getUserAppsTable());
-        userAppsPane.setBounds(370, 450, 315, 145);
-        panel.add(userAppsPane);
+
         // add buyApp functionality
         JLabel commentLbl = new JLabel("Comment:");
         commentLbl.setBounds(370, 370, 75, 25);
@@ -306,10 +303,7 @@ public class HazeApp {
                     try {
                         hasAlready = conn.buyApp(commentTxt);
                         if(!hasAlready) {
-                            panel.remove(userAppsPane);
-                            userAppsPane = new JScrollPane(conn.getUserAppsTable());
-                            userAppsPane.setBounds(370, 450, 315, 145);
-                            panel.add(userAppsPane);
+                            displaySuccess("Bought successfully", true);
                         }
 
                     } catch (SQLException throwables) {
@@ -406,5 +400,13 @@ public class HazeApp {
         panel.add(searchText);
     }
 
+    public static void initializeUserAppsPane() {
+        if(userAppsPane != null)
+            panel.add(userAppsPane);
+        else {
+            panel.remove(userAppsPane);
+            panel.add(userAppsPane);
+        }
+    }
 
 }

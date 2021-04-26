@@ -165,18 +165,18 @@ GO
 
 -- EXEC buyApp 1, 2, 'this game is amazing!'
 /*
-	This procedure gets each of the user's bought apps
+	This procedure gets each of the current game's comments
 */
-CREATE PROCEDURE getUserApps
-		@userId		INT
+ALTER PROCEDURE getUserApps
+		@mapId		INT
 AS 
 BEGIN
 	sET NOCOUNT ON
 	SELECT	userApps.appId,
-			Apps.appName,
+			u.username,
 			userApps.comment	
 	FROM userApps
-		JOIN Apps ON userApps.appId = Apps.appId
-	WHERE userApps.userId = @userId
+		JOIN Users u ON		userApps.userId = u.userId
+	WHERE userApps.userId = @mapId
 END
 -- EXEC getUserApps 1

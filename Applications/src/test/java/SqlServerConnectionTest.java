@@ -23,7 +23,7 @@ class SqlServerConnectionTest {
         assertEquals(3.99,(double)appsTable.getValueAt(0, 1), 0.001);
         assertEquals(25639874,(int)appsTable.getValueAt(0, 2));
         assertEquals(6,(int)appsTable.getValueAt(0, 3));
-        // test order by downloads, descending
+        // test order by downloads, descending:
         appsTable =  conn.getAppsTable(ApplicationsTableModel.ORDER_BY_DOWNLOADS,0 );
         assertEquals("Clash Of Clans",appsTable.getValueAt(0, 0));
         assertEquals(0.0,(double)appsTable.getValueAt(0, 1), 0.001);

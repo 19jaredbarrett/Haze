@@ -7,7 +7,7 @@ public class UserAppTableModel extends AbstractTableModel {
     private final ArrayList<UserApp> userAppList;
 
     private final String[] columnNames = new String[] {
-            "appName", "Comment"
+            "username", "Comment"
     };
     private final Class[] columnClass = new Class[] {
             String.class, String.class

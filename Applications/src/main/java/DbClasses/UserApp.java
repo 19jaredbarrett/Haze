@@ -3,12 +3,12 @@ package DbClasses;
 public class UserApp {
 
     private int appId;
-    private String appName;
+    private String username;
     private String comment;
 
-    public UserApp(int appId, String  appName, String comment) {
+    public UserApp(int appId, String  username, String comment) {
         this.appId = appId;
-        this.appName = appName;
+        this.username = username;
         this.comment = comment;
     }
 
@@ -29,10 +29,10 @@ public class UserApp {
     }
 
     public String getAppName() {
-        return appName;
+        return username;
     }
 
     public void setAppName(String appName) {
-        this.appName = appName;
+        this.username = appName;
     }
 }
