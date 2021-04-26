@@ -21,6 +21,7 @@ public class HazeApp {
     public static JScrollPane scrollPane;
     private static JLabel displayCreatedSuccess;
     protected static JScrollPane userAppsPane;
+    private static JLabel userAppsLbl;
 
     public static void main(String[] args) throws SQLException {
         panel = new JPanel();
@@ -334,11 +335,6 @@ public class HazeApp {
             }
         });
         panel.add(signOutButton);
-        // Add userApps Label, below will show the user's apps
-        JLabel userAppsLbl = new JLabel(currUser.getUsername() + "'s Apps", SwingConstants.CENTER);
-        userAppsLbl.setBounds(415,425,180, 25);
-        // display this user's bought apps
-        panel.add(userAppsLbl);
         // admin panel implementation !!!!!
         if(currUser.getAccessLevelInt() == 2 ) {
             //This1sMyRealPa$$word admin example
@@ -348,7 +344,6 @@ public class HazeApp {
                 @Override
                 public void mouseClicked(MouseEvent evt) {
                     panel.remove(userAppsPane);
-                    panel.remove(userAppsLbl);
                     JLabel thisisalligot = new JLabel("This is all I got so far to be honest... :)");
                     thisisalligot.setFont(new Font("Helvetica", Font.BOLD, 13));
                     thisisalligot.setBounds(370,440,230, 25);
@@ -401,9 +396,17 @@ public class HazeApp {
     }
 
     public static void addUserAppsPane(JScrollPane userAppsPaneParam) {
+        // Add userApps Label, below will show the user's apps
+
             if(userAppsPane != null) {
+               panel.remove(userAppsLbl);
                 panel.remove(userAppsPane);
             }
+        userAppsLbl = new JLabel(conn.getCurrentApp().getAppName() + " comments", SwingConstants.CENTER);
+        userAppsLbl.setBounds(370,425,315, 25);
+        //.setBounds(370, 450, 315, 145);
+
+        panel.add(userAppsLbl);
             userAppsPane = userAppsPaneParam;
             panel.add(userAppsPane);
     }
