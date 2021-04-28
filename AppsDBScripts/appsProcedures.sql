@@ -167,16 +167,19 @@ GO
 /*
 	This procedure gets each of the current game's comments
 */
-CREATE PROCEDURE getUserApps
+ALTER PROCEDURE getUserApps
 		@appId		INT
 AS 
 BEGIN
 	sET NOCOUNT ON
 	SELECT	userApps.appId,
+			a.appName,
+			userApps.userId,
 			u.username,
 			userApps.comment	
 	FROM userApps
 		JOIN Users u ON		userApps.userId = u.userId
+		JOIN Apps a		ON userApps.appId = a.appId
 	WHERE userApps.appId = @appId
 END
 GO

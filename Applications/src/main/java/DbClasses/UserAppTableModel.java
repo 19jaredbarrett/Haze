@@ -50,7 +50,7 @@ public class UserAppTableModel extends AbstractTableModel {
     {
         UserApp row = userAppList.get(rowIndex);
         if(0 == columnIndex) {
-            return row.getAppName();
+            return row.getUsername();
         }
         else if(1 == columnIndex) {
             return row.getComment();

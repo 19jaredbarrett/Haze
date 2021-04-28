@@ -22,6 +22,7 @@ public class SqlServerConnection implements ConnectionProvider {
     private User currentUser;
     private ApplicationsTableModel model;
     private App currentApp;
+    private UserApp currentUserApp;
 
     //HazePa$$word123
     public SqlServerConnection() {
@@ -336,7 +337,9 @@ public class SqlServerConnection implements ConnectionProvider {
                     UserApp currUserApp = new UserApp (
                             rs.getInt(1),
                             rs.getString(2),
-                            rs.getString(3)
+                            rs.getInt(3),
+                            rs.getString(4),
+                            rs.getString(5)
                     );
                     userAppsList.add(currUserApp);
                 }
@@ -346,9 +349,35 @@ public class SqlServerConnection implements ConnectionProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
         UserAppTableModel userAppsModel  = new UserAppTableModel(userAppsList);
         // create the table and return it
         JTable userAppsTable = new JTable(userAppsModel);
+        userAppsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int row = userAppsTable.rowAtPoint(evt.getPoint());
+                int col = userAppsTable.columnAtPoint(evt.getPoint());
+                if (row >= 0 && col >= 0) {
+                    currentUserApp = userAppsModel.getUserApp(row);
+                    // add user apps pane if user is logged in
+                    // handle cell click
+                    // get cell 1: the app name
+                    // String appName = appsTable.get
+                    String textAreaString = "App Id: ";
+
+                    textAreaString += currentUserApp.getAppId() + "\n\nName: ";
+                    textAreaString += currentUserApp.getAppName() + "\n\nUser Id: ";
+                    textAreaString += currentUserApp.getUserId() + "\n\nUsername: ";
+                    textAreaString += currentUserApp.getUsername() + "\n\nComment: ";
+                    textAreaString += currentUserApp.getComment();
+                    // format number of downloads with commas
+                    DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
+                    HazeApp.appDesc.setText(textAreaString);
+                    HazeApp.appDesc.repaint();
+                }
+            }
+        });
         userAppsTable.getColumnModel().getColumn(0).setPreferredWidth(115);
         userAppsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         return userAppsTable;

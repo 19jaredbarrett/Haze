@@ -354,6 +354,12 @@ public class HazeApp {
             });
             panel.add(openAdminInterface);
             panel.setBackground(Color.pink);
+            // moderator: add moderator button
+        } else if (currUser.getAccessLevelInt() == 1) {
+
+            // regular user
+        } else {
+
         }
 
         frame.invalidate();
