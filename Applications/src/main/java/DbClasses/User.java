@@ -7,6 +7,22 @@ public class User {
     // 0-2, 2 is admin
     private int accessLevel;
 
+    /**
+     * Creates a user object using account credentials.
+     * store the data for the users in the database
+     * @param username The username of the user account.
+     * @param password The password for a target user account.
+     * @param balance Double. The balance for each user.
+     * @param accesslevel Int. The accesslevel. Should be the number of 0 or 1 or 2.
+     */
+    public User(String username, String password, double balance, int accesslevel) {
+        this.username = username;
+        this.password = password;
+        this.balance = balance;
+        this.accessLevel = accesslevel;
+    }
+
+    
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -14,7 +30,6 @@ public class User {
         this.balance = 50.00;
         this.accessLevel = 0;
     }
-
 
 
     public User(String username, char [] passwordChar) {
@@ -33,10 +48,6 @@ public class User {
         this.balance = balance;
     }
 
-
-
-
-
     // purpose of isExist
     public int getAccessLevelInt() {
         return accessLevel;
@@ -51,23 +62,11 @@ public class User {
             case 2:
                 return "Admin";
         }
-        return "not accessible";
+        return "not accessible"; // if the accesslevel is not the number 0 or 1 or 2
     }
 
     public void setAccessLevel(int accessLevel) {
         this.accessLevel = accessLevel;
-    }
-
-    /**
-     * Creates a user object using account credentials.
-     * @param username The username of the user account.
-     * @param password The password for a target user account.
-     */
-    public User(String username, String password, double balance, int accesslevel) {
-        this.username = username;
-        this.password = password;
-        this.balance = balance;
-        this.accessLevel = accesslevel;
     }
 
     public String getUsername() {
