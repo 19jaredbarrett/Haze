@@ -62,6 +62,18 @@ class SqlServerConnectionTest {
     void registerUser() throws SQLException {
         User u = new User("testAnotherOne", "sgopikasijpg", 300.0, 1);
         assertTrue(conn.registerUser(u.getUsername(), new char[] {'a','b','c'}));
+        
+        
+        // these two examples of user is for testing the result if username or passwords are null
+        User blankUsername = new User("","test",0,1);
+        assertFalse(conn.registerUser(blankUsername.getUsername(), new char[] {'t','e','s','t'}));
+        
+        User blankPassword = new User("testUsername","",0,1);
+        assertFalse(conn.registerUser(blankPassword.getUsername(), new char[] {' '}));
+        
+        // this example of user is for testing the result if username and passwords are all null
+        User allblank = new User("","",0,1);
+        assertFalse(conn.registerUser(allblank.getUsername(), new char[] {' '}));
     }
 
     @Test
@@ -69,6 +81,25 @@ class SqlServerConnectionTest {
         User u = conn.loginUser("DogeLord", new char[] {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'} );
         assertEquals("DogeLord", u.getUsername());
         assertEquals(u, conn.getCurrentUser());
+        
+        
+     // these two examples of user is for testing the result if username or passwords are null
+        User blankUsername = conn.loginUser("",new char[] {'t','e','s','t'});
+        assertEquals("",blankUsername.getUsername());
+        assertEquals("test",blankUsername.getPassword());
+        assertEquals(blankUsername,conn.getCurrentUser());
+ 
+        User blankPassword = conn.loginUser("blankUsername",new char[] {' '});
+        assertEquals("blankUsername",blankPassword.getUsername());
+        assertEquals("",blankPassword.getPassword());
+        assertEquals(blankPassword,conn.getCurrentUser());
+        
+        // this example of user is for testing the result if username and passwords are all null
+        User allblank = new User("","",0,1);
+        assertEquals("allblank",allblank.getUsername());
+        assertEquals("",allblank.getPassword());
+        assertEquals(allblank,conn.getCurrentUser());
+         
     }
     @Test
     void buyApp() throws SQLException {
