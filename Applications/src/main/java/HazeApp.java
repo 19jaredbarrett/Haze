@@ -23,6 +23,7 @@ public class HazeApp {
     protected static JScrollPane userAppsPane;
     private static JLabel userAppsLbl;
     private static JButton adminRemoveBtn, modCommentBtn, memberReqBtn;
+    private static JTextField buyCommentTxt;
 
 
     public static void main(String[] args) throws SQLException {
@@ -287,7 +288,7 @@ public class HazeApp {
         JLabel commentLbl = new JLabel("Comment:");
         commentLbl.setBounds(370, 370, 75, 25);
         panel.add(commentLbl);
-        JTextField buyCommentTxt = new JTextField();
+        buyCommentTxt = new JTextField();
         buyCommentTxt.setBounds(440,370, 200, 25);
         panel.add(buyCommentTxt);
         JButton buyCurrentApp = new JButton("Buy App");
@@ -297,9 +298,7 @@ public class HazeApp {
             public void mouseClicked(MouseEvent evt) {
 
                 String commentTxt = buyCommentTxt.getText();
-                if(commentTxt.isEmpty())
-                    displaySuccess("Must provide comment!",false);
-                else if (conn.getCurrentApp() == null) {
+                if (conn.getCurrentApp() == null) {
                     displaySuccess("Must select an App!", false);
                 } else if (conn.getCurrentUser().getBalance() < conn.getCurrentApp().getPrice()) {
                     displaySuccess("You don't have enough money :[", false);
@@ -340,14 +339,39 @@ public class HazeApp {
         });
         panel.add(signOutButton);
         // access level panel implementation !!!!!
-        JButton accessInterfaceBtn = new JButton(currUser.getAccessLevel() + " Panel");
-        accessInterfaceBtn.setBounds(415, 400, 180, 25);
+        JButton accessInterfaceBtn = new JButton(currUser.getAccessLevel() + " Comment options");
+        accessInterfaceBtn.setBounds(370, 400, 190, 25);
+        if(currUser.getAccessLevelInt() >= 1) {
+            panel.setBackground(Color.pink);
+            JButton dispAllComments = new JButton("Display all");
+            dispAllComments.setBounds(565, 400, 110, 25);
+            panel.add(dispAllComments);
+            dispAllComments.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    removeAccessInterface();
+                    if(userAppsPane != null) {
+                        panel.remove(userAppsPane);
+                        userAppsPane = null;
+                    }
+                    try {
+                        userAppsPane = new JScrollPane(conn.getAllUserAppsTable());
+                        addUserAppsPane(userAppsPane);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+
+                    displaySuccess("All comments are meow displayed(⌐▨_▨)", true);
+                }
+            });
+
+        }
 
             //dogelord admin example
         accessInterfaceBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                displayAccessInterface(currUser, false);
+                displayAccessInterface(conn.getCurrentUser());
                 displaySuccess(currUser.getAccessLevel() + " interface opened (⌐▨_▨)", true);
             }
         });
@@ -359,22 +383,25 @@ public class HazeApp {
         frame.repaint();
     }
 
-    /**
-     * This method adds the interface for each access level: admin, moderator, member
-     * @param isDelete deletes all of the items from the panel if isDelete is true
-     * @param currUser
-     */
-    public static void displayAccessInterface(User currUser, boolean isDelete) {
-        if(isDelete ) {
-            if(modCommentBtn != null) {
-                panel.remove(modCommentBtn);
-                panel.remove(adminRemoveBtn);
+    public static void removeAccessInterface() {
+
+            if(memberReqBtn != null) {
                 panel.remove(memberReqBtn);
+                if(modCommentBtn != null) {
+                    panel.remove(modCommentBtn);
+                    if (adminRemoveBtn != null)
+                        panel.remove(adminRemoveBtn);
+                }
+
             }
             return;
-        }
+    }
+    /**
+     * This method adds the interface for each access level: admin, moderator, member
+     * @param currUser
+     */
+    public static void displayAccessInterface(User currUser) {
         if(userAppsPane != null) {
-
             panel.remove(userAppsPane);
             panel.remove(userAppsLbl);
             userAppsPane = null;
@@ -385,17 +412,37 @@ public class HazeApp {
             case 2:
                 adminRemoveBtn = new JButton("Remove UserApp comment");
                 adminRemoveBtn.setBounds(405, 430, 200, 25);
+                adminRemoveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent evt) {
+                        if(conn.removeUserApp())
+                            displaySuccess("Removal Success", true);
+                        else
+                            displaySuccess("Removal failed", false);
+
+                    }
+                });
                 panel.add(adminRemoveBtn );
-                panel.setBackground(Color.pink);
             // moderator
             case 1:
                 modCommentBtn = new JButton("Modify UserApp comment");
                 modCommentBtn.setBounds(415, 460, 180, 25);
+                modCommentBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent evt) {
+                        String currentComment = buyCommentTxt.getText();
+                    }
+                });
                 panel.add(modCommentBtn);
             // member
             default:
                 memberReqBtn = new JButton("Request Application");
                 memberReqBtn.setBounds(415, 490, 180, 25);
+                memberReqBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent evt) {
+                    }
+                });
                 panel.add(memberReqBtn);
         }
     }
@@ -439,16 +486,23 @@ public class HazeApp {
         // Add userApps Label, below will show the user's apps
 
             if(userAppsPane != null) {
-               panel.remove(userAppsLbl);
+                if(userAppsLbl != null)
+                    panel.remove(userAppsLbl);
                 panel.remove(userAppsPane);
             }
-        userAppsLbl = new JLabel(conn.getCurrentApp().getAppName() + " comments", SwingConstants.CENTER);
-        userAppsLbl.setBounds(370,425,315, 25);
-        //.setBounds(370, 450, 315, 145);
+
+            if(conn.getCurrentApp() != null) {
+                userAppsLbl = new JLabel(conn.getCurrentApp().getAppName() + " comments", SwingConstants.CENTER);
+
+            } else {
+                userAppsLbl = new JLabel("All apps");
+            }
+        userAppsLbl.setBounds(370, 425, 315, 25);
 
         panel.add(userAppsLbl);
-            userAppsPane = userAppsPaneParam;
-            panel.add(userAppsPane);
+        userAppsPane = userAppsPaneParam;
+        userAppsPane.setBounds(370, 450, 315, 145);
+        panel.add(userAppsPane);
     }
 
 }

@@ -187,14 +187,17 @@ GO
 /*
 	This
 */
-CREATE PROCEDURE getAllUserApps
+ALTER PROCEDURE getAllUserApps
 AS
 BEGIN
 	SET NOCOUNT ON
 	SELECT	userApps.appId,
+			a.appName,
+			userApps.userId,
 			u.username,
 			userApps.comment	
 	FROM userApps
 		JOIN Users u ON		userApps.userId = u.userId
+		JOIN Apps a		ON userApps.appId = a.appId
 
 END

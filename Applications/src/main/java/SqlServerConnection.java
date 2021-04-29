@@ -238,10 +238,13 @@ public class SqlServerConnection implements ConnectionProvider {
                 int row = appsTable.rowAtPoint(evt.getPoint());
                 int col = appsTable.columnAtPoint(evt.getPoint());
                 if (row >= 0 && col >= 0) {
-                    HazeApp.displayAccessInterface(currentUser, true);
                     currentApp = model.getApp(row);
+                    // remove access interface if exists :]
+                    HazeApp.removeAccessInterface();
                     // add user apps pane if user is logged in
                     if(currentUser != null) {
+                        // set currentUserApp to null so that we are not
+                        currentUserApp = null;
                         JScrollPane userAppsPane = null;
                         // add userApps table to the panel
                         try {
@@ -250,7 +253,6 @@ public class SqlServerConnection implements ConnectionProvider {
                             throwables.printStackTrace();
                         }
                         if(userAppsPane != null ) {
-                            userAppsPane.setBounds(370, 450, 315, 145);
                             HazeApp.addUserAppsPane(userAppsPane);
                         }
                     }
@@ -383,8 +385,70 @@ public class SqlServerConnection implements ConnectionProvider {
         userAppsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         return userAppsTable;
     } // end getApps method
-    private void addUserAppsTableFeatures() {
+    public JTable getAllUserAppsTable() throws SQLException {
+        conn = getConnection();
+        // a rectangle of arraylists
+        ArrayList<UserApp> userAppsList = new ArrayList<>();
+        String call = "{call getAllUserApps()}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    UserApp currUserApp = new UserApp (
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getInt(3),
+                            rs.getString(4),
+                            rs.getString(5)
+                    );
+                    userAppsList.add(currUserApp);
+                }
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
+        UserAppTableModel userAppsModel  = new UserAppTableModel(userAppsList);
+        // create the table and return it
+        JTable userAppsTable = new JTable(userAppsModel);
+        userAppsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int row = userAppsTable.rowAtPoint(evt.getPoint());
+                int col = userAppsTable.columnAtPoint(evt.getPoint());
+                if (row >= 0 && col >= 0) {
+                    currentUserApp = userAppsModel.getUserApp(row);
+                    // add user apps pane if user is logged in
+                    // handle cell click
+                    // get cell 1: the app name
+                    // String appName = appsTable.get
+                    String textAreaString = "App Id: ";
+
+                    textAreaString += currentUserApp.getAppId() + "\n\nName: ";
+                    textAreaString += currentUserApp.getAppName() + "\n\nUser Id: ";
+                    textAreaString += currentUserApp.getUserId() + "\n\nUsername: ";
+                    textAreaString += currentUserApp.getUsername() + "\n\nComment: ";
+                    textAreaString += currentUserApp.getComment();
+                    // format number of downloads with commas
+                    DecimalFormat formatCommas = new DecimalFormat("#,###,###,###");
+                    HazeApp.appDesc.setText(textAreaString);
+                    HazeApp.appDesc.repaint();
+                }
+            }
+        });
+        userAppsTable.getColumnModel().getColumn(0).setPreferredWidth(115);
+        userAppsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+        return userAppsTable;
+    } // end getApps method
+    public boolean removeUserApp () {
+        if (currentUserApp == null)
+            return false;
+
+
+        return true;
     }
 
     /**
