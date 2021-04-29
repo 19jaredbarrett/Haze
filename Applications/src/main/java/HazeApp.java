@@ -22,6 +22,7 @@ public class HazeApp {
     private static JLabel displayCreatedSuccess;
     protected static JScrollPane userAppsPane;
     private static JLabel userAppsLbl;
+    private static JButton modCommentBtn;
 
     public static void main(String[] args) throws SQLException {
         panel = new JPanel();
@@ -335,35 +336,55 @@ public class HazeApp {
             }
         });
         panel.add(signOutButton);
-        // admin panel implementation !!!!!
-        if(currUser.getAccessLevelInt() == 2 ) {
-            //This1sMyRealPa$$word admin example
-            JButton openAdminInterface = new JButton("Open Admin Panel");
-            openAdminInterface.setBounds(415, 400, 180, 25);
-            openAdminInterface.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent evt) {
-                    panel.remove(userAppsPane);
-                    JLabel thisisalligot = new JLabel("This is all I got so far to be honest... :)");
-                    thisisalligot.setFont(new Font("Helvetica", Font.BOLD, 13));
-                    thisisalligot.setBounds(370,440,230, 25);
-                    thisisalligot.setForeground(Color.CYAN);
-                    panel.add(thisisalligot);
-                    displaySuccess("Admin interface opened (⌐▨_▨)", true);
-                }
-            });
-            panel.add(openAdminInterface);
-            panel.setBackground(Color.pink);
+        // access level panel implementation !!!!!
+        JButton accessInterfaceBtn = new JButton(currUser.getAccessLevel() + " Panel");
+        accessInterfaceBtn.setBounds(415, 400, 180, 25);
+
+            //dogelord admin example
+        accessInterfaceBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                displayAccessInterface(currUser, false);
+                displaySuccess(currUser.getAccessLevel() + " interface opened (⌐▨_▨)", true);
+            }
+        });
+        panel.setBackground(Color.pink);
             // moderator: add moderator button
-        } else if (currUser.getAccessLevelInt() == 1) {
 
-            // regular user
-        } else {
-
-        }
+        panel.add(accessInterfaceBtn);
 
         frame.invalidate();
         frame.repaint();
+    }
+
+    /**
+     * This method adds the interface for each access level: admin, moderator, member
+     * @param isDelete deletes all of the items from the panel if isDelete is true
+     * @param currUser
+     */
+    public static void displayAccessInterface(User currUser, boolean isDelete) {
+        if(isDelete) {
+            panel.remove(modCommentBtn);
+            return;
+        }
+        if(userAppsPane != null) {
+            panel.remove(userAppsPane);
+            panel.remove(userAppsLbl);
+        }
+        // this switch case ensures we are still able to
+        switch(currUser.getAccessLevelInt()) {
+            // admin
+            case 2:
+
+            // moderator
+            case 1:
+                modCommentBtn = new JButton("Modify UserApp comment");
+                modCommentBtn.setBounds(415, 430, 180, 25);
+                panel.add(modCommentBtn);
+
+            // member
+            default:
+        }
     }
 
     /**

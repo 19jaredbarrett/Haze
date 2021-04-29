@@ -238,6 +238,7 @@ public class SqlServerConnection implements ConnectionProvider {
                 int row = appsTable.rowAtPoint(evt.getPoint());
                 int col = appsTable.columnAtPoint(evt.getPoint());
                 if (row >= 0 && col >= 0) {
+                    HazeApp.displayAccessInterface(currentUser, true);
                     currentApp = model.getApp(row);
                     // add user apps pane if user is logged in
                     if(currentUser != null) {
@@ -382,6 +383,9 @@ public class SqlServerConnection implements ConnectionProvider {
         userAppsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         return userAppsTable;
     } // end getApps method
+    private void addUserAppsTableFeatures() {
+
+    }
 
     /**
      * This method gets the current user's apps
