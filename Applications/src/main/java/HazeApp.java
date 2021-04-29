@@ -22,7 +22,8 @@ public class HazeApp {
     private static JLabel displayCreatedSuccess;
     protected static JScrollPane userAppsPane;
     private static JLabel userAppsLbl;
-    private static JButton modCommentBtn;
+    private static JButton adminRemoveBtn, modCommentBtn, memberReqBtn;
+
 
     public static void main(String[] args) throws SQLException {
         panel = new JPanel();
@@ -72,6 +73,8 @@ public class HazeApp {
 
 
     private static void displayGuestInterface()  {
+        conn.setCurrentUser(null);
+        conn.setCurrentApp(null);
         // username label
         JLabel userLabel = new JLabel("Username:");
         userLabel.setBounds(10, 20, 80, 25);
@@ -348,7 +351,6 @@ public class HazeApp {
                 displaySuccess(currUser.getAccessLevel() + " interface opened (⌐▨_▨)", true);
             }
         });
-        panel.setBackground(Color.pink);
             // moderator: add moderator button
 
         panel.add(accessInterfaceBtn);
@@ -363,27 +365,38 @@ public class HazeApp {
      * @param currUser
      */
     public static void displayAccessInterface(User currUser, boolean isDelete) {
-        if(isDelete) {
-            panel.remove(modCommentBtn);
+        if(isDelete ) {
+            if(modCommentBtn != null) {
+                panel.remove(modCommentBtn);
+                panel.remove(adminRemoveBtn);
+                panel.remove(memberReqBtn);
+            }
             return;
         }
         if(userAppsPane != null) {
+
             panel.remove(userAppsPane);
             panel.remove(userAppsLbl);
+            userAppsPane = null;
         }
         // this switch case ensures we are still able to
         switch(currUser.getAccessLevelInt()) {
             // admin
             case 2:
-
+                adminRemoveBtn = new JButton("Remove UserApp comment");
+                adminRemoveBtn.setBounds(405, 430, 200, 25);
+                panel.add(adminRemoveBtn );
+                panel.setBackground(Color.pink);
             // moderator
             case 1:
                 modCommentBtn = new JButton("Modify UserApp comment");
-                modCommentBtn.setBounds(415, 430, 180, 25);
+                modCommentBtn.setBounds(415, 460, 180, 25);
                 panel.add(modCommentBtn);
-
             // member
             default:
+                memberReqBtn = new JButton("Request Application");
+                memberReqBtn.setBounds(415, 490, 180, 25);
+                panel.add(memberReqBtn);
         }
     }
 
