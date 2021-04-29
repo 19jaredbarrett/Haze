@@ -5,16 +5,24 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-
+   // This four user example is created to test if the User.java go well in normal condition.
     User u = new User("dogelord", "password", 2.02, 0);
     User alex = new User("Alex", "asdf123456", 123.56, 0);
     User tom = new User("TomClancy", "abcdefg", 987.65, 0);
     User rich = new User("imrich", "imrich", 123456.78, 0);
     
+    // This two example for moderator and admin is created to test if they go well.
+    // The Moderator is the class extends User. 
+    // The Admin is the class extends Moderator.
     Moderator m = new Moderator("moderator1", "moderator", 0.01, 1);
     Admin ad = new Admin("admin","admin",999999,2);
     
+    // This example is to test if the accesslevel is not 0 or 1 or 2
+    User wrongAccess = new User("wrongAccess","wrongAccess",0,10);
     
+    /**
+     * use getUsername() method to test does the username of each user is equal to the giving username
+     */
     @Test
     void getUsername() {
         assertEquals("dogelord", u.getUsername());
@@ -24,7 +32,11 @@ class UserTest {
         assertEquals("moderator1", m.getUsername());
         assertEquals("admin",ad.getUsername());
     }
-
+    
+    /**
+     * use setUsername() method in User.java to set the username for each user,
+     * and use getUsername() to test does they have equal value 
+     **/
     @Test
     void setUsername() {
     	u.setUsername("a");
@@ -46,6 +58,10 @@ class UserTest {
         assertEquals("a",ad.getUsername());
     }
 
+    /**
+     * use setPassword() method in User.java to set the password for each user,
+     * and use getPassword() to test does they have equal value 
+     **/
     @Test
     void setPassword() {
     	u.setPassword("123");
@@ -67,6 +83,9 @@ class UserTest {
         assertEquals("adad",ad.getPassword());
     }
     
+    /**
+     * use getPassword() method to test does the password of each user is equal to the giving password
+     */
     @Test
     void getPassword() {
     	assertEquals("password", u.getPassword());
@@ -78,6 +97,9 @@ class UserTest {
 
     }
     
+    /**
+     * use getBalance() method to test does the balance of each user is equal to the giving balance
+     */
     @Test
     void getBalance() {
     	assertEquals(2.02,u.getBalance());
@@ -88,6 +110,10 @@ class UserTest {
     	assertEquals(999999,ad.getBalance());
     }
     
+    /**
+     * use setBalance() method in User.java to set the balance for each user,
+     * and use getBalance() to test does they have equal value 
+     **/
     @Test
     void setBalance() {
     	u.setBalance(2.02);
@@ -109,6 +135,9 @@ class UserTest {
     	assertEquals(87654,ad.getBalance());
     }
     
+    /**
+     * use getAccessLevel() method to test does the accesslevel of each user is equal to the giving accesslevel
+     */
     @Test 
     void getAccessLevel() {
     	assertEquals("Member",u.getAccessLevel());
@@ -117,8 +146,15 @@ class UserTest {
     	assertEquals("Member" , rich.getAccessLevel());
     	assertEquals("Moderator" , m.getAccessLevel());
     	assertEquals("Admin",ad.getAccessLevel());
+    	
+    	//test if the accesslevel of user is not 0 or 1 or 2
+    	assertEquals("not accessible", wrongAccess.getAccessLevel());
     }
     
+    /**
+     * use setAccessLevel() method in User.java to set the accesslevel for each user,
+     * and use getAccessLevel() to test does they have equal value 
+     **/
     @Test
     void setAccessLevel() {
     	u.setAccessLevel(0);
@@ -138,6 +174,10 @@ class UserTest {
 
     	ad.setAccessLevel(2);
     	assertEquals("Admin",ad.getAccessLevel());
+    	
+    	// test if the accesslevel of user is not 0 or 1 or 2
+    	wrongAccess.setAccessLevel(5);
+    	assertEquals("not accessible",wrongAccess.getAccessLevel());
     	
     }
 
