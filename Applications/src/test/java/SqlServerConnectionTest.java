@@ -78,9 +78,10 @@ class SqlServerConnectionTest {
         conn.setCurrentApp(darksouls);
         assertEquals(darksouls, conn.getCurrentApp());
     }
-    /*
+    /**
         Gray box test 1: the user attempts to buy an application
         We check to see if the app is actually bought
+     *  @throws SQLException the connection is wrong
      */
     @Test
     void buyApp() throws SQLException {
@@ -102,9 +103,10 @@ class SqlServerConnectionTest {
         assertFalse(conn.buyApp("ok game"));
         assertEquals(5000, conn.getCurrentUser().getBalance(), 0.001);
     }
-    /*
+    /**
         Gray box 2: User registers and logs in, then the user attempts to
         get the userapps table for the app: Counter Strike Global Offensive
+        * @throws SQLException the connection is wrong
      */
     @Test
     void getUserApps() throws SQLException {
@@ -132,7 +134,7 @@ class SqlServerConnectionTest {
      * The user attempts to register different users
      * The first user should work, th second, third, and fourth should not
      * because the username is empty or the password is empty.
-     * @throws SQLException well you know the drill.
+     * @throws SQLException the connection is wrong
      */
     @Test
     void registerUser() throws SQLException {

@@ -12,9 +12,9 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class GrayBlackTest {
+public class BlackBoxTest {
 
-    public GrayBlackTest () throws SQLException, FileNotFoundException {
+    public BlackBoxTest() throws SQLException, FileNotFoundException {
         //final InputStream original = System.in;
         //final FileInputStream fips = new FileInputStream(new File("[path_to_file]"));
         //System.setIn(fips);
