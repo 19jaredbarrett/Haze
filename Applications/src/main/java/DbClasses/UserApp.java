@@ -8,6 +8,14 @@ public class UserApp {
     private String username;
     private String comment;
 
+    /**
+     * displays user's comment when a user clicks on the table
+     * @param appId Int. The id for the app.
+     * @param appName String. The name for the app.
+     * @param userId Int. The id number for the user.
+     * @param username String. The username for the user.
+     * @param comment String. The comment to the app, written by the user.
+     */
     public UserApp(int appId, String appName, int userId, String  username, String comment) {
         this.appId = appId;
         this.appName = appName;
