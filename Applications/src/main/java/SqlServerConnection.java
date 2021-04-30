@@ -135,6 +135,10 @@ public class SqlServerConnection implements ConnectionProvider {
      * @throws SQLException throw it in the trash
      */
     public boolean registerUser(String username, char[] pass) throws SQLException {
+        if(username == null || pass == null)
+            return false;
+        if(username.isEmpty() || pass.length == 0)
+            return false;
         conn = getConnection();
         User u = new User(username, pass);
         boolean isSuccess = false;
@@ -295,6 +299,10 @@ public class SqlServerConnection implements ConnectionProvider {
      * @return true or false, depending on whether the user has the app already
      */
     public boolean buyApp(String comment) throws SQLException {
+        if(comment == null || comment.isEmpty())
+            return false;
+        else if (currentApp.getPrice() > currentUser.getBalance())
+            return false;
         conn = getConnection();
         String call = "{call buyApp(?, ?, ?)}";
 

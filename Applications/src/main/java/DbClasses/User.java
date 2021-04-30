@@ -7,10 +7,14 @@ public class User {
     private double balance;
     // 0-2, 2 is admin
     private int accessLevel;
+
     /**
      * Creates a user object using account credentials.
+     * store the data for the users in the database
      * @param username The username of the user account.
      * @param password The password for a target user account.
+     * @param balance Double. The balance for each user.
+     * @param accesslevel Int. The accesslevel. Should be the number of 0 or 1 or 2.
      */
     public User(String username, String password, double balance, int accesslevel) {
         this.username = username;
