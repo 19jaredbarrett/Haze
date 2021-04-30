@@ -201,3 +201,36 @@ BEGIN
 		JOIN Apps a		ON userApps.appId = a.appId
 
 END
+GO
+
+CREATE PROCEDURE removeUserApp 
+	@appId INT,
+	@userId	INT
+AS
+BEGIN
+	IF NOT EXISTS (SELECT comment FROM UserApps WHERE (userApps.appId = @appId) AND (userApps.userId = @userId))
+	BEGIN 
+		SELECT 1;
+	END ELSE BEGIN
+		DELETE FROM userApps
+		WHERE (userApps.appId = @appId) AND (userApps.userId = @userId)
+	END
+END
+GO
+
+CREATE PROCEDURE updateUserApp
+	@appId	INT,
+	@userId	INT,
+	@comment VARCHAR(MAX)
+AS BEGIN
+	IF NOT EXISTS (SELECT comment FROM UserApps WHERE (userApps.appId = @appId) AND (userApps.userId = @userId))
+	BEGIN 
+		SELECT 1;
+	END ELSE BEGIN
+		UPDATE userApps
+		SET userApps.comment = @comment
+		WHERE (userApps.appId = @appId) AND (userApps.userId = @userId)
+	END
+
+END
+GO

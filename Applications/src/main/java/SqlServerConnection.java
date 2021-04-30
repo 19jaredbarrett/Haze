@@ -443,12 +443,52 @@ public class SqlServerConnection implements ConnectionProvider {
         userAppsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         return userAppsTable;
     } // end getApps method
-    public boolean removeUserApp () {
-        if (currentUserApp == null)
-            return false;
 
-
-        return true;
+    /**
+     * Removes the current userApp
+     * @return whether it is successful or not
+     * @throws SQLException
+     */
+    public boolean removeUserApp () throws SQLException {
+        conn = getConnection();
+        // a rectangle of arraylists
+        boolean isSuccess = true;
+        String call = "{call removeUserApp(?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setInt(1, currentUserApp.getAppId());
+            stmt.setInt(2, currentUserApp.getUserId());
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                isSuccess = false;
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return isSuccess;
+    }
+    public boolean updateUserApp(String comment) throws SQLException {
+        conn = getConnection();
+        // a rectangle of arraylists
+        boolean isSuccess = true;
+        String call = "{call updateUserApp(?, ?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(call)) {
+            // set order and isAsc to true
+            stmt.setInt(1, currentUserApp.getAppId());
+            stmt.setInt(2, currentUserApp.getUserId());
+            stmt.setString(3, comment);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                isSuccess = false;
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return isSuccess;
     }
 
     /**
@@ -473,5 +513,13 @@ public class SqlServerConnection implements ConnectionProvider {
     
     public void setCurrentApp(App currentApp) {
     	this.currentApp = currentApp;
+    }
+
+    public UserApp getCurrentUserApp() {
+        return currentUserApp;
+    }
+
+    public void setCurrentUserApp(UserApp currentUserApp) {
+        this.currentUserApp = currentUserApp;
     }
 }

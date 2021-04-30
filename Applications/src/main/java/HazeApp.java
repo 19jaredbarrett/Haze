@@ -415,11 +415,21 @@ public class HazeApp {
                 adminRemoveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent evt) {
-                        if(conn.removeUserApp())
-                            displaySuccess("Removal Success", true);
-                        else
-                            displaySuccess("Removal failed", false);
-
+                        if(conn.getCurrentUserApp() == null) {
+                            displaySuccess("Must have one selected", false);
+                            return;
+                        }
+                        boolean isSuccess = false;
+                        try {
+                            isSuccess = conn.removeUserApp();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                        if(isSuccess) {
+                            displaySuccess("Removed successfuly ;)", true);
+                        } else {
+                            displaySuccess("Already deleted :]", false);
+                        }
                     }
                 });
                 panel.add(adminRemoveBtn );
@@ -431,6 +441,21 @@ public class HazeApp {
                     @Override
                     public void mouseClicked(MouseEvent evt) {
                         String currentComment = buyCommentTxt.getText();
+                        if(conn.getCurrentUserApp() == null) {
+                            displaySuccess("Must have one selected", false);
+                            return;
+                        }
+                        boolean isSuccess = false;
+                        try {
+                            isSuccess = conn.updateUserApp(currentComment);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                        if(isSuccess) {
+                            displaySuccess("Updated successfully ;)", true);
+                        } else {
+                            displaySuccess("Already deleted :]", false);
+                        }
                     }
                 });
                 panel.add(modCommentBtn);
