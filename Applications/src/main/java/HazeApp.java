@@ -13,11 +13,13 @@ public class HazeApp {
     // we make global variables for all things JFrame, so we can access these variables outside of the class
     public static JPanel panel;
     public static JFrame frame;
-    public static JTextField userText;
-    public static JPasswordField pwText;
+    public static JTextField userText, searchText;
+    public static JPasswordField pwText, confPwText;
     public static JButton signInButton;
-    public static JButton signUpButton;
+    public static JButton signUpButton, searchBtn, signOutButton;
+    public static JButton registerUser;
     public static JTextArea appDesc;
+    public static JTable appsTable;
     public static JScrollPane scrollPane;
     private static JLabel displayCreatedSuccess;
     protected static JScrollPane userAppsPane;
@@ -58,7 +60,7 @@ public class HazeApp {
         panel.add(appsLabel);
         // create ScrollPane with scrollbar, set the table as what we're showing
         // get a table with apps
-        JTable appsTable = conn.getAppsTable(ApplicationsTableModel.ORDER_BY_NAME, 1);
+        appsTable = conn.getAppsTable(ApplicationsTableModel.ORDER_BY_NAME, 1);
         HazeApp.scrollPane = new JScrollPane(appsTable);
         HazeApp.scrollPane.setBounds(10, 80, 350, 450 );
         panel.add(scrollPane);
@@ -163,14 +165,14 @@ public class HazeApp {
         panel.add(confPassLabel);
 
         // confirm the password
-        JPasswordField confPassField = new JPasswordField(20);
-        confPassField.setBounds(330, 50, 165, 25);
-        panel.add(confPassField);
-        panel.add(confPassField);
+        confPwText = new JPasswordField(20);
+        confPwText.setBounds(330, 50, 165, 25);
+        panel.add(confPwText);
+        panel.add(confPwText);
 
 
         //sign up button
-        JButton registerUser = new JButton("Register");
+        registerUser = new JButton("Register");
         registerUser.setBounds(500, 20, 90, 25);
         // mouse Listener: creates user based on several conditions:
         // user doesn't exist, passwords are equal, username provided
@@ -179,7 +181,7 @@ public class HazeApp {
             public void mouseClicked(MouseEvent evt) {
                 String user = userText.getText();
                 char[] pass = pwText.getPassword();
-                char[] confPass = confPassField.getPassword();
+                char[] confPass = confPwText.getPassword();
                 String displayString;
                 boolean isCreated = false;
                 if(user.length() <= 5) {
@@ -324,7 +326,7 @@ public class HazeApp {
         });
         panel.add(buyCurrentApp);
 
-        JButton signOutButton = new JButton("Sign Out");
+        signOutButton = new JButton("Sign Out");
         signOutButton.setBounds(500, 20, 90, 25);
         signOutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -355,7 +357,8 @@ public class HazeApp {
                         userAppsPane = null;
                     }
                     try {
-                        userAppsPane = new JScrollPane(conn.getAllUserAppsTable());
+                        appsTable = conn.getAllUserAppsTable();
+                        userAppsPane = new JScrollPane(appsTable);
                         addUserAppsPane(userAppsPane);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
@@ -476,13 +479,14 @@ public class HazeApp {
      * Adds search button to our program!
      */
     private static void addSearchButton() {
-        JTextField searchText = new JTextField(20);
+        searchText = new JTextField(20);
         searchText.setBounds(100, 540, 165, 25);
-        JButton searchBtn = new JButton("Search");
+        searchBtn = new JButton("Search");
         searchBtn.setBounds(10, 540,85,25);
         searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+
                 String searchString = searchText.getText();
                 if(searchString.isEmpty())
                     displaySuccess("Provide a search string please!", false);
@@ -492,7 +496,8 @@ public class HazeApp {
                     displaySuccess("Searching...¯\\_(ツ)_/¯ \uD83E\uDD14", true);
                     panel.remove(scrollPane);
                     try {
-                        scrollPane = new JScrollPane(conn.getAppsTable(searchString));
+                        appsTable = conn.getAppsTable(searchString);
+                        scrollPane = new JScrollPane(appsTable);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
