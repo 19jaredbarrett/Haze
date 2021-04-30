@@ -137,10 +137,10 @@ class AppTest {
         assertEquals(5000001, dota.getNumDownloads());
 
         ds.setNumDownloads(ds.getNumDownloads()+1);
-        assertEquals(1000001, ds.getNumDownloads());
+        assertEquals(1000002, ds.getNumDownloads());
 
         dota.setNumDownloads(dota.getNumDownloads()+1);
-        assertEquals(5000001, dota.getNumDownloads());
+        assertEquals(5000002, dota.getNumDownloads());
         trash.setNumDownloads(trash.getNumDownloads()+1);
         assertEquals(124, trash.getNumDownloads());
     }
