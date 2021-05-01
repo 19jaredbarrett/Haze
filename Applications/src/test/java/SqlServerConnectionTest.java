@@ -58,8 +58,6 @@ class SqlServerConnectionTest {
         assertEquals(7,(int)appsTable.getValueAt(0, 3));
     }
 
-
-
     @Test
     void loginUser() throws SQLException {
         User u = conn.loginUser("DogeLord", new char[] {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'} );

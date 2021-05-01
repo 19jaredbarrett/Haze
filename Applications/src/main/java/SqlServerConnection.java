@@ -265,7 +265,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     // String appName = appsTable.get
                     String textAreaString = "App Id: ";
 
-                    textAreaString += currentApp.getId() + "\n\nName: ";
+                    textAreaString += currentApp.getId() + "\n\nGame: ";
                     textAreaString += currentApp.getAppName() + "\n\nDescription: ";
                     textAreaString += currentApp.getDescription() + "\n\nPrice: ";
                     textAreaString += currentApp.getPrice() + "\n\nNumDownloads: ";
@@ -377,7 +377,7 @@ public class SqlServerConnection implements ConnectionProvider {
                     // String appName = appsTable.get
                     String textAreaString = "App Id: ";
 
-                    textAreaString += currentUserApp.getAppId() + "\n\nName: ";
+                    textAreaString += currentUserApp.getAppId() + "\n\nGame: ";
                     textAreaString += currentUserApp.getAppName() + "\n\nUser Id: ";
                     textAreaString += currentUserApp.getUserId() + "\n\nUsername: ";
                     textAreaString += currentUserApp.getUsername() + "\n\nComment: ";

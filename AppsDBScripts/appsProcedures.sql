@@ -12,7 +12,7 @@
 	1: descending order
 */
 
-ALTER PROCEDURE getApps 
+CREATE PROCEDURE getApps 
 	@order	INT,
 	@isAsc	BIT
 	AS
@@ -83,8 +83,8 @@ ALTER PROCEDURE getApps
 
 GO
 -- test
-EXEC getApps 1, 1
-GO
+--EXEC getApps 1, 1
+--GO
 
 CREATE PROCEDURE registerUser
 	@username		VARCHAR(100),
@@ -119,7 +119,7 @@ GO
 -- EXEC loginUser 'DogeLord'
 
 -- Procedure searchApps returns a table with rows  that contains the given substring
-ALTER PROCEDURE searchApps
+CREATE PROCEDURE searchApps
 	@searchString		VARCHAR(100)
 AS BEGIN
 	SELECT *
@@ -167,7 +167,7 @@ GO
 /*
 	This procedure gets each of the current game's comments
 */
-ALTER PROCEDURE getUserApps
+CREATE PROCEDURE getUserApps
 		@appId		INT
 AS 
 BEGIN
@@ -187,7 +187,7 @@ GO
 /*
 	This
 */
-ALTER PROCEDURE getAllUserApps
+CREATE PROCEDURE getAllUserApps
 AS
 BEGIN
 	SET NOCOUNT ON

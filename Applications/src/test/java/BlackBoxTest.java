@@ -45,6 +45,9 @@ public class BlackBoxTest {
         assertNull(HazeApp.conn.getCurrentUser());
 
     }
+    /*
+
+     */
     @Test
     void registerUserTest() {
         // click signupbutton
